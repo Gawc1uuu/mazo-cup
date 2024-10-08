@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:15
+    container_name: mazo-container
+    environment:
+      POSTGRES_USER: example_user
+      POSTGRES_PASSWORD: example_password
+      POSTGRES_DB: mazo-db
+    ports:
+      - '5500:5432'
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data # Local folder for Postgres data
+    networks:
+      - backend
+      
+networks:
+  backend:
+
