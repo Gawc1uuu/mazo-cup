@@ -1,4 +1,36 @@
-.LoginForm-container {
+.LoginForm {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    gap: 15px;
+}
+
+.LoginForm-input {
+    width: 90%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+}
+
+.LoginForm-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.LoginForm-button {
+    padding: 12px;
+    background-color: #E78121;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.LoginForm-button:hover {
+    background-color: #fc902b;
 }

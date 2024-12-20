@@ -6,12 +6,15 @@ import "./Login.css"
 
 const Login = () => {
     return (
-        <Card>
-            <div>
-                <LoginForm />
-            </div>
-            <div>
-                <img className="Form-image" src={logo.toString()} alt="Logo" />
+        <Card className='Login-card'>
+            <div className='Login-container'>
+                <div className='Login-form'>
+                    <LoginForm />
+                </div>
+                <div className='Login-divider'></div>
+                <div className='Login-image'>
+                    <img className="Login-logo" src={logo.toString()} alt="Logo" />
+                </div>
             </div>
         </Card>
     )

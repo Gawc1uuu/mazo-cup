@@ -3,11 +3,13 @@ import "./Card.css"
 
 interface Props {
     children: ReactNode;
+    className?: string;
 }
 
-const Card = ({ children }: Props) => {
+const Card = ({ children, className }: Props) => {
+    const customClassNames = className ? `Card ${className}` : `Card`
     return (
-        <div className="Card">{children}</div>
+        <div className={customClassNames}>{children}</div>
     )
 }
 
