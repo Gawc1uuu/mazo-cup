@@ -10,11 +10,29 @@ const LoginForm = () => {
         setChecked(e.target.checked)
     }
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         console.log(email)
         console.log(password)
         console.log(checked)
+
+        const res = await fetch("http://localhost:4000/api/user/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json", // Specify the correct content type
+            },
+            body: JSON.stringify({
+                email,
+                password,
+                checked
+            })
+        })
+
+        console.log(res)
+
+        const data = await res.json()
+
+        console.log(data)
 
         setEmail('')
         setPassword('')

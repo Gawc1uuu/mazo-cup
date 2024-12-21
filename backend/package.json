@@ -17,6 +17,7 @@
   "description": "",
   "dependencies": {
     "@types/express": "^5.0.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.25.0",
     "drizzle-orm": "^0.34.1",
@@ -24,5 +25,8 @@
     "nodemon": "^3.1.7",
     "postgres": "^3.4.4",
     "typescript": "^5.6.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17"
   }
 }
