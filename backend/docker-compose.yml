@@ -9,10 +9,12 @@ services:
     ports:
       - '5500:5432'
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data # Local folder for Postgres data
+      - postgres-data:/var/lib/postgresql/data # Named volume for Postgres data
     networks:
       - backend
       
 networks:
   backend:
 
+volumes:
+  postgres-data: # Named volume definition

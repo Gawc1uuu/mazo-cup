@@ -1,5 +1,6 @@
 import "./Navbar.css"
 import logo from "../assets/mazocup.svg";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
     return (
@@ -10,8 +11,8 @@ const Navbar = () => {
                 </div>
                 {/* buttons div */}
                 <div className="Navbar-navigation">
-                    <button className='Navbar-AuthButton'>Login</button>
-                    <button className='Navbar-AuthButton'>Register</button>
+                    <Link to="/login" className='Navbar-AuthButton'>Login</Link>
+                    <Link to="/register" className='Navbar-AuthButton'>Register</Link>
                 </div>
             </div>
         </nav>
