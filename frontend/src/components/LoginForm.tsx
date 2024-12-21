@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import "./LoginForm.css"
+import useAuthContext from '../hooks/useAuthContext'
 
 const LoginForm = () => {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [checked, setChecked] = useState<boolean>(false)
+    const { dispatch } = useAuthContext()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(e.target.checked)
@@ -28,12 +30,15 @@ const LoginForm = () => {
             })
         })
 
-        console.log(res)
+        if (!res.ok) {
+            const errorData = await res.json();
+            console.error("Registration failed:", errorData);
+            return;
+        }
 
         const data = await res.json()
 
-        console.log(data)
-
+        dispatch({ type: "LOGIN", payload: data })
         setEmail('')
         setPassword('')
         setChecked(false)

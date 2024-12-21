@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import "./RegisterForm.css"
+import useAuthContext from '../hooks/useAuthContext'
 
 const RegisterForm = () => {
+    const { dispatch } = useAuthContext()
     const [email, setEmail] = useState<string>('')
     const [username, setUsername] = useState<string>('')
     const [password, setPassword] = useState<string>('')
@@ -11,11 +13,36 @@ const RegisterForm = () => {
         setChecked(e.target.checked)
     }
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         console.log(email)
         console.log(password)
         console.log(checked)
+
+        const res = await fetch("http://localhost:4000/api/user/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email,
+                username,
+                password,
+                checked
+            })
+        })
+
+        if (!res.ok) {
+            const errorData = await res.json();
+            console.error("Registration failed:", errorData);
+            return;
+        }
+
+        const user = await res.json();
+
+
+        dispatch({ type: "LOGIN", payload: user })
+
 
         setEmail('')
         setUsername('')

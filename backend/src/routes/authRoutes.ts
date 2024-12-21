@@ -38,6 +38,8 @@ router.post("/register", async (req, res) => {
     try {
         const [existingUser] = await db.select().from(UserTable).where(eq(UserTable.email, email));
 
+        console.log(existingUser)
+
         if (existingUser) {
             res.status(400).json({ message: "User with that email already exists" });
             return;
@@ -45,17 +47,20 @@ router.post("/register", async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10)
 
+        console.log(hashedPassword)
+
         const [newUser] = await db.insert(UserTable).values({
             email,
             password: hashedPassword,
             username
         }).returning();
 
+        console.log(newUser)
+
         const token = jwt.sign({ userId: newUser.id }, process.env.SECRET!, { expiresIn: "7d" });
 
         // Respond with the new user details and the token
         res.status(201).json({
-            message: "User registered successfully",
             user: {
                 id: newUser.id,
                 email: newUser.email,
@@ -65,7 +70,8 @@ router.post("/register", async (req, res) => {
         });
         return;
     } catch (error) {
-        res.status(500).json({ message: "Someting went wrong" })
+        console.log(error)
+        res.status(500).json({ message: "Someting went wrong", error })
     }
 });
 
