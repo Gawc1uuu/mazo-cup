@@ -24,7 +24,11 @@ const Navbar = () => {
                     </>
                     }
                     {AuthState.user &&
-                        <button onClick={logout} className="Navbar-AuthButton">Logout</button>
+                        <>
+                            <Link to="/create-game">Create Game</Link>
+                            <Link to="/waiting-games">Join Game</Link>
+                            <button onClick={logout} className="Navbar-AuthButton">Logout</button>
+                        </>
                     }
                 </div>
             </div>
