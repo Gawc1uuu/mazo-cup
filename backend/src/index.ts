@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from "cors";
 import authRouter from "./routes/authRoutes"
+import gamesRouter from "./routes/gamesRoutes"
 import { createServer } from "http"
 import { Server } from "socket.io"
 
@@ -13,6 +14,7 @@ app.use(express.json())
 app.use(express.urlencoded())
 app.use(express.text())
 app.use("/api/user", authRouter)
+app.use("/api/games", gamesRouter)
 
 
 

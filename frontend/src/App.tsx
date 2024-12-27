@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import useAuthContext from "./hooks/useAuthContext";
+import CreateGame from "./pages/CreateGame";
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
             <Route path="/login" element={!AuthState.user ? <Login /> : <Navigate to="/" />} />
             <Route path="/register" element={!AuthState.user ? <Register /> : <Navigate to="/" />} />
             <Route path="/" element={AuthState.user ? <Dashboard /> : <Navigate to="/login" />} />
+            <Route path="/create-game" element={AuthState.user ? <CreateGame /> : <Navigate to="/login" />} />
           </Routes>
         </div>
       </BrowserRouter>

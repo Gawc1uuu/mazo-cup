@@ -17,7 +17,7 @@ export const GamesTable = pgTable("games", {
     location: varchar("location", { length: 255 }).notNull(),
     date: timestamp("date").notNull(),
     createdBy: uuid("created_by").references(() => UserTable.id).notNull(),
-    status: varchar("status", { length: 255 }).notNull(),
+    status: varchar("status", { length: 255 }).notNull(), // statuses can be waiting, team_picking,ready
     createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -26,6 +26,6 @@ export const PlayersTable = pgTable("players", {
     id: uuid("id").primaryKey().defaultRandom(),
     gameId: uuid("game_id").references(() => GamesTable.id).notNull(),
     userId: uuid("user_id").references(() => UserTable.id).notNull(),
-    role: varchar("role", { length: 255 }).notNull(),
+    role: varchar("role", { length: 255 }).notNull(), //can be captain or player
     joinedAt: timestamp("joined_at").defaultNow(),
 });
