@@ -1,0 +1,9 @@
+.CreateGame-card {
+    width: 800px;
+    max-width: 100%;
+}
+
+.CreateGame-container {
+    width: 100%;
+    display: flex;
+}

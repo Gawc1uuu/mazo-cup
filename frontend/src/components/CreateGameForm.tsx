@@ -24,10 +24,9 @@ const CreateGameForm = () => {
 
         console.log(parsedUser)
 
-        const parsedDate = new Date(date).getTime();
         console.log(name)
         console.log(location)
-        console.log(parsedDate)
+        console.log(date)
 
         try {
 
@@ -39,7 +38,7 @@ const CreateGameForm = () => {
                 body: JSON.stringify({
                     name,
                     location,
-                    date: parsedDate,
+                    date,
                     createdBy: parsedUser.user.id
                 })
             })
@@ -60,11 +59,11 @@ const CreateGameForm = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className='CreateGame-form' onSubmit={handleSubmit}>
             <input onChange={(e) => setName(e.target.value)} value={name} type="text" placeholder='name' className='CreateGame-input' />
             <input onChange={(e) => setLocation(e.target.value)} value={location} type="text" placeholder='location' className='CreateGame-input' />
             <input onChange={(e) => setDate(e.target.value)} value={date} type='datetime-local' placeholder='datetime' className='CreateGame-input' />
-            <button>Create game</button>
+            <button className='CreateGame-button'>Create game</button>
         </form>
     )
 }

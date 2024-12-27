@@ -3,6 +3,7 @@ import { db } from "../database/db";
 import { GamesTable, UserTable } from "../database/schema";
 import { eq } from "drizzle-orm"
 import dotenv from "dotenv";
+import { parse } from "path";
 dotenv.config()
 
 const router = express.Router();
@@ -13,12 +14,15 @@ router.post("/create", async (req, res) => {
     try {
 
         console.log(name, location, date, createdBy);
+        const localDate = new Date(date); // Parse local datetime
+
+        console.log("Local Date:", localDate.toString()); // Local time
 
 
         const [newGame] = await db.insert(GamesTable).values({
             name,
             location,
-            date,
+            date: localDate,
             status: "waiting",
             createdBy
         }).returning()
