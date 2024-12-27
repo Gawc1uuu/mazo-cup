@@ -17,7 +17,7 @@ export const GamesTable = pgTable("games", {
     location: varchar("location", { length: 255 }).notNull(),
     date: timestamp("date").notNull(),
     createdBy: uuid("created_by").references(() => UserTable.id).notNull(),
-    status: varchar("status", { length: 255 }).notNull(), // statuses can be waiting, team_picking,ready
+    status: statusEnum("status"), // statuses can be waiting, team_picking,ready
     createdAt: timestamp("created_at").defaultNow(),
 });
 

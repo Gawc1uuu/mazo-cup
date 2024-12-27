@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express"
 import { db } from "../database/db";
-import { UserTable } from "../database/schema";
+import { GamesTable, UserTable } from "../database/schema";
 import { eq } from "drizzle-orm"
 import dotenv from "dotenv";
 dotenv.config()
@@ -15,9 +15,17 @@ router.post("/create", async (req, res) => {
         console.log(name, location, date, createdBy);
 
 
+        const [newGame] = await db.insert(GamesTable).values({
+            name,
+            location,
+            date,
+            status: "waiting",
+            createdBy
+        }).returning()
 
-        res.status(200);
-        return
+
+        res.status(200).json(newGame);
+        return;
 
     } catch (error) {
         console.error(error)

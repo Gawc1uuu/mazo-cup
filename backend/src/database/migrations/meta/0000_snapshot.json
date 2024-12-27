@@ -1,5 +1,5 @@
 {
-  "id": "403afcd9-605b-47e6-bb4d-bb09f1701471",
+  "id": "b385a40c-65a2-406d-8eca-69b1afdc0767",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -41,9 +41,10 @@
         },
         "status": {
           "name": "status",
-          "type": "varchar(255)",
+          "type": "status",
+          "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
