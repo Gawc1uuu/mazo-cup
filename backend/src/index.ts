@@ -14,25 +14,8 @@ app.use(express.urlencoded())
 app.use(express.text())
 app.use("/api/user", authRouter)
 
-const server = createServer(app);
-
-const io = new Server(server, {
-  cors: {
-    origin: 'http://localhost:3000', // Allow requests from React app
-    methods: ['GET', 'POST'],       // Allowed HTTP methods
-    credentials: true,
-  }
-});
-
-io.on('connection', (socket) => {
-  console.log(socket)
-  console.log('A client connected');
-  socket.on('disconnect', () => {
-    console.log('A client disconnected');
-  });
-});
 
 
-server.listen(4000, () => {
+app.listen(4000, () => {
   console.log('Server is running on port 4000');
 });

@@ -1,11 +1,79 @@
 {
-  "id": "6a25d98f-fe94-4763-986c-66bb647ea4c1",
+  "id": "403afcd9-605b-47e6-bb4d-bb09f1701471",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.game_players": {
-      "name": "game_players",
+    "public.games": {
+      "name": "games",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "location": {
+          "name": "location",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date": {
+          "name": "date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "games_created_by_users_id_fk": {
+          "name": "games_created_by_users_id_fk",
+          "tableFrom": "games",
+          "tableTo": "users",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.players": {
+      "name": "players",
       "schema": "",
       "columns": {
         "id": {
@@ -19,34 +87,33 @@
           "name": "game_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "player_id": {
-          "name": "player_id",
+        "user_id": {
+          "name": "user_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "team": {
-          "name": "team",
-          "type": "varchar(50)",
+        "role": {
+          "name": "role",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "joined_at": {
+          "name": "joined_at",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false,
-          "default": "'none'"
-        },
-        "is_captain": {
-          "name": "is_captain",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
+          "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "game_players_game_id_games_id_fk": {
-          "name": "game_players_game_id_games_id_fk",
-          "tableFrom": "game_players",
+        "players_game_id_games_id_fk": {
+          "name": "players_game_id_games_id_fk",
+          "tableFrom": "players",
           "tableTo": "games",
           "columnsFrom": [
             "game_id"
@@ -57,81 +124,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "game_players_player_id_users_id_fk": {
-          "name": "game_players_player_id_users_id_fk",
-          "tableFrom": "game_players",
+        "players_user_id_users_id_fk": {
+          "name": "players_user_id_users_id_fk",
+          "tableFrom": "players",
           "tableTo": "users",
           "columnsFrom": [
-            "player_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.games": {
-      "name": "games",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "status": {
-          "name": "status",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "capitain1_id": {
-          "name": "capitain1_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "capitain2_id": {
-          "name": "capitain2_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "games_capitain1_id_users_id_fk": {
-          "name": "games_capitain1_id_users_id_fk",
-          "tableFrom": "games",
-          "tableTo": "users",
-          "columnsFrom": [
-            "capitain1_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "games_capitain2_id_users_id_fk": {
-          "name": "games_capitain2_id_users_id_fk",
-          "tableFrom": "games",
-          "tableTo": "users",
-          "columnsFrom": [
-            "capitain2_id"
+            "user_id"
           ],
           "columnsTo": [
             "id"

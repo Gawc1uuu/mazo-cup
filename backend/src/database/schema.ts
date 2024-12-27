@@ -13,16 +13,19 @@ export const UserTable = pgTable("users", {
 
 export const GamesTable = pgTable("games", {
     id: uuid("id").primaryKey().defaultRandom(),
-    status: varchar("status", { length: 50 }),
-    capitain1Id: uuid("capitain1_id").references(() => UserTable.id),
-    capitain2Id: uuid("capitain2_id").references(() => UserTable.id),
-    createdAt: timestamp("createdAt").defaultNow()
-})
+    name: varchar("name", { length: 255 }).notNull(),
+    location: varchar("location", { length: 255 }).notNull(),
+    date: timestamp("date").notNull(),
+    createdBy: uuid("created_by").references(() => UserTable.id).notNull(),
+    status: varchar("status", { length: 255 }).notNull(),
+    createdAt: timestamp("created_at").defaultNow(),
+});
 
-export const GamePlayersTable = pgTable("game_players", {
+
+export const PlayersTable = pgTable("players", {
     id: uuid("id").primaryKey().defaultRandom(),
-    gameId: uuid("game_id").references(() => GamesTable.id),
-    playerId: uuid("player_id").references(() => UserTable.id),
-    team: varchar("team", { length: 50 }).default("none"),
-    isCapitain: boolean("is_captain").default(false)
-})
+    gameId: uuid("game_id").references(() => GamesTable.id).notNull(),
+    userId: uuid("user_id").references(() => UserTable.id).notNull(),
+    role: varchar("role", { length: 255 }).notNull(),
+    joinedAt: timestamp("joined_at").defaultNow(),
+});
