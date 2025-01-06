@@ -1,0 +1,37 @@
+.WaitingGame {}
+
+
+
+.GameCard {
+    margin: 15px auto;
+    min-width: 800px;
+    text-align: center;
+}
+
+.GameCard-container h3,
+.GameCard-container p {
+    margin: 0;
+    /* Removes default margin */
+}
+
+.GameCard-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    /* Enable flexbox */
+    flex-direction: column;
+    /* Stack content vertically */
+    align-items: center;
+}
+
+.WaitingGame-button {
+    padding: 12px;
+    background-color: #E78121;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    align-self: flex-end;
+}

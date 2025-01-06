@@ -14,6 +14,7 @@
 
 .Navbar-navigation {
     display: flex;
+    align-items: center;
     gap: 20px;
 }
 
@@ -29,4 +30,14 @@
 .Navbar-Logo img {
     height: 80px;
     width: auto;
+}
+
+.Navbar-link {
+    text-decoration: none;
+    color: white;
+}
+
+.Navbar-link:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }

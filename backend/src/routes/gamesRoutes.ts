@@ -3,7 +3,6 @@ import { db } from "../database/db";
 import { GamesTable, UserTable } from "../database/schema";
 import { eq } from "drizzle-orm"
 import dotenv from "dotenv";
-import { parse } from "path";
 dotenv.config()
 
 const router = express.Router();
@@ -34,6 +33,24 @@ router.post("/create", async (req, res) => {
     } catch (error) {
         console.error(error)
         res.status(500).json({ message: "Cannot create game" })
+    }
+})
+
+// get all waiting games
+router.get("/all-waiting", async (req, res) => {
+    try {
+        const allWaitingGames = await db.select().from(GamesTable).where(eq(
+            GamesTable.status, "waiting"
+        ))
+
+        console.log(allWaitingGames)
+
+
+        res.status(200).json({ games: allWaitingGames });
+        return
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ message: "Cannot get games" })
     }
 })
 

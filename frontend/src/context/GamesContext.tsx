@@ -6,7 +6,8 @@ export type Game = {
     date: string,
     name: string,
     createdBy: string,
-    createdAt: string
+    createdAt: string,
+    status: "waiting" | "picking_teams" | "ready"
 }
 
 type GameAction = { type: "SET_GAMES", payload: Game[] } | { type: "ADD_GAME", payload: Game } | { type: "DELETE_GAME", payload: string } | { type: "UPDATE_GAME", payload: Game }
