@@ -35,3 +35,8 @@
     cursor: pointer;
     align-self: flex-end;
 }
+
+.WaitingGame-button:disabled {
+    background-color: #ffca98;
+    cursor: not-allowed;
+}

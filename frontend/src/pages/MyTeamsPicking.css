@@ -1,0 +1,20 @@
+.MyTeamsPicking-card {
+    min-width: 800px;
+}
+
+.MyTeamsPicking-card-container h3,
+.MyTeamsPicking-card-container p {
+    margin: 0;
+    /* Removes default margin */
+}
+
+.MyTeamsPicking-card-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    /* Enable flexbox */
+    flex-direction: column;
+    /* Stack content vertically */
+    align-items: center;
+}

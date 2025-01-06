@@ -5,11 +5,13 @@ import CreateGameForm from '../components/CreateGameForm'
 
 const CreateGame = () => {
     return (
-        <Card className='CreateGame-card'>
-            <div className='CreateGame-container'>
-                <CreateGameForm />
-            </div>
-        </Card>
+        <div className='CreateGame'>
+            <Card className='CreateGame-card'>
+                <div className='CreateGame-container'>
+                    <CreateGameForm />
+                </div>
+            </Card>
+        </div>
     )
 }
 

@@ -8,6 +8,8 @@ import Dashboard from "./pages/Dashboard";
 import useAuthContext from "./hooks/useAuthContext";
 import CreateGame from "./pages/CreateGame";
 import WaitingGame from "./pages/WaitingGame";
+import MyTeamsPicking from "./pages/MyTeamsPicking";
+import TeamsPicking from "./pages/TeamsPicking";
 
 function App() {
 
@@ -24,6 +26,8 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/waiting-games" element={<WaitingGame />} />
             <Route path="/create-game" element={<CreateGame />} />
+            <Route path="/teams-picking" element={<MyTeamsPicking />} />
+            <Route path="/teams-picking/:id" element={<TeamsPicking />} />
           </Routes>
         </div>
       </BrowserRouter>

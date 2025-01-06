@@ -5,12 +5,17 @@ interface Props {
 }
 
 export interface AuthState {
-    user: User | null;
+    user: {
+        id: string;
+        username: string;
+        email: string;
+        token: string
+    } | null;
 }
 
 export interface User {
     id: string;
-    name: string;
+    username: string;
     email: string;
     token: string
 }
@@ -60,7 +65,8 @@ const AuthContextProvider = ({ children }: Props) => {
         const user = localStorage.getItem("user")
 
         if (user) {
-            dispatch({ type: "LOGIN", payload: JSON.parse(user) })
+            console.log("Loaded user from localStorage:", JSON.parse(user));
+            dispatch({ type: "LOGIN", payload: JSON.parse(user) });
         }
 
     }, [])

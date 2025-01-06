@@ -37,6 +37,7 @@ const LoginForm = () => {
         }
 
         const data = await res.json()
+        console.log(data)
 
         dispatch({ type: "LOGIN", payload: data })
         setEmail('')

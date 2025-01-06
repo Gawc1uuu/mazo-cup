@@ -27,6 +27,7 @@ const Navbar = () => {
                         <>
                             <Link className="Navbar-link" to="/create-game">Create Game</Link>
                             <Link className="Navbar-link" to="/waiting-games">Join Game</Link>
+                            <Link className="Navbar-link" to="/teams-picking">Pick Teams</Link>
                             <button onClick={logout} className="Navbar-AuthButton">Logout</button>
                         </>
                     }

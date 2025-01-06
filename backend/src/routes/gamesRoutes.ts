@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express"
 import { db } from "../database/db";
-import { GamesTable, UserTable } from "../database/schema";
-import { eq } from "drizzle-orm"
+import { GamesTable, PlayersTable, UserTable } from "../database/schema";
+import { eq, and } from "drizzle-orm"
 import dotenv from "dotenv";
 dotenv.config()
 
@@ -39,20 +39,218 @@ router.post("/create", async (req, res) => {
 // get all waiting games
 router.get("/all-waiting", async (req, res) => {
     try {
-        const allWaitingGames = await db.select().from(GamesTable).where(eq(
-            GamesTable.status, "waiting"
-        ))
+        const allWaitingGames = await db
+            .select({
+                game: GamesTable,
+                player: PlayersTable,
+                user: UserTable
+            })
+            .from(GamesTable)
+            .leftJoin(PlayersTable, eq(GamesTable.id, PlayersTable.gameId))
+            .leftJoin(UserTable, eq(PlayersTable.userId, UserTable.id))
+            .where(eq(GamesTable.status, "waiting"));
 
-        console.log(allWaitingGames)
 
 
-        res.status(200).json({ games: allWaitingGames });
+        const result = allWaitingGames.reduce((acc: any, row: any) => {
+            const gameId = row.game.id
+
+            if (!acc[gameId]) {
+                acc[gameId] = {
+                    ...row.game,
+                    players: []
+                }
+            }
+
+            if (row.player && row.user) {
+                acc[gameId].players.push({
+                    id: row.user.id,
+                    username: row.user.username,
+                    email: row.user.email,
+                    role: row.player.role,
+                })
+            }
+            return acc;
+
+        }, {})
+
+        const data: any = Object.values(result);
+
+
+        res.status(200).json({ games: data });
         return
     } catch (error) {
         console.error(error)
         res.status(500).json({ message: "Cannot get games" })
     }
 })
+
+router.post("/join", async (req, res) => {
+    try {
+
+        const { userId, gameId: id } = req.body;
+
+
+        const [game] = await db.select().from(GamesTable).where(eq(
+            GamesTable.id,
+            id
+        ))
+        const players = await db.select().from(PlayersTable).where(eq(
+            PlayersTable.gameId,
+            game.id
+        ))
+
+        if (players.length >= 6) {
+            res.status(400).json({ message: "Game is full" });
+            return
+        }
+
+        // const [existingPlayer] = await db
+        //     .select()
+        //     .from(PlayersTable)
+        //     .where(and(eq(PlayersTable.gameId, game.id), eq(PlayersTable.userId, userId)));
+
+        // if (existingPlayer) {
+        //     res.status(400).json({ message: "User has already joined this game" });
+        //     return;
+        // }
+
+        const [newPlayer] = await db.insert(PlayersTable).values({
+            gameId: game.id,
+            userId,
+            role: "player",
+        }).returning();
+
+        if (players.length + 1 === 6) {
+            // Randomly assign two captains
+            const allPlayers = [...players, newPlayer];
+            const shuffledPlayers = allPlayers.sort(() => 0.5 - Math.random());
+            const [captain1, captain2] = shuffledPlayers;
+
+            // Update captains in PlayersTable
+            await db.transaction(async (trx) => {
+                await trx.update(PlayersTable)
+                    .set({ role: "captain" })
+                    .where(eq(PlayersTable.id, captain1.id));
+
+                await trx.update(PlayersTable)
+                    .set({ role: "captain" })
+                    .where(eq(PlayersTable.id, captain2.id));
+            });
+
+            // Update game status to "picking_teams"
+            await db.update(GamesTable)
+                .set({ status: "picking_teams" })
+                .where(eq(GamesTable.id, game.id));
+        }
+
+        res.status(200).json(newPlayer)
+        return
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ message: "something went wrong" })
+    }
+})
+
+router.get("/teams-picking", async (req, res) => {
+    try {
+        const { userId } = req.query;
+
+        if (typeof userId !== 'string') {
+            res.status(400).json({ message: "Invalid userId" });
+            return;
+        }
+
+        const pickingTeamsGames = await db
+            .select({
+                game: GamesTable,
+                player: PlayersTable,
+                user: UserTable,
+            })
+            .from(GamesTable)
+            .leftJoin(PlayersTable, eq(GamesTable.id, PlayersTable.gameId))
+            .leftJoin(UserTable, eq(PlayersTable.userId, UserTable.id))
+            .where(and(eq(GamesTable.status, "picking_teams"), eq(PlayersTable.userId, userId)));
+
+        const result = pickingTeamsGames.reduce((acc: any, row: any) => {
+            const gameId = row.game.id;
+
+            if (!acc[gameId]) {
+                acc[gameId] = {
+                    ...row.game,
+                    players: [],
+                };
+            }
+
+            if (row.player && row.user) {
+                acc[gameId].players.push({
+                    id: row.user.id,
+                    username: row.user.username,
+                    email: row.user.email,
+                    role: row.player.role,
+                });
+            }
+
+            return acc;
+        }, {});
+
+        const games = Object.values(result);
+
+        res.status(200).json({ games });
+    } catch (error) {
+        console.error("Failed to fetch games:", error);
+        res.status(500).json({ message: "Failed to fetch games" });
+    }
+});
+
+router.get("/teams-picking/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        console.log(id)
+        const game = await db.select({
+            game: GamesTable,
+            player: PlayersTable,
+            user: UserTable
+        }).from(GamesTable).leftJoin(PlayersTable, eq(PlayersTable.gameId, GamesTable.id))
+            .leftJoin(UserTable, eq(UserTable.id, PlayersTable.userId))
+            .where(eq(GamesTable.id, id))
+
+
+        const result = game.reduce((acc: any, row: any) => {
+            const gameId = row.game.id;
+
+            if (!acc[gameId]) {
+                acc[gameId] = {
+                    ...row.game,
+                    players: [],
+                };
+            }
+
+            if (row.player && row.user) {
+                acc[gameId].players.push({
+                    id: row.user.id,
+                    username: row.user.username,
+                    email: row.user.email,
+                    role: row.player.role,
+                });
+            }
+
+            return acc;
+        }, {});
+
+        const [singleGameWithPlayers]: any = Object.values(result);
+
+
+        res.status(200).json({ ...singleGameWithPlayers })
+        return;
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ message: "Something went wrong" })
+        return;
+    }
+})
+
+
 
 
 

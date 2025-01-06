@@ -25,7 +25,7 @@ router.post("/login", async (req: Request, res: Response) => {
         }
         const token = jwt.sign({ userId: existingUser.id }, process.env.SECRET!, { expiresIn: "7d" })
 
-        res.status(200).json({ user: { id: existingUser.id, email: existingUser.email, username: existingUser.username, token } })
+        res.status(200).json({ id: existingUser.id, email: existingUser.email, username: existingUser.username, token })
         return;
     } catch (error) {
         res.status(500).json({ message: "Something went wrong" })
@@ -61,12 +61,11 @@ router.post("/register", async (req, res) => {
 
         // Respond with the new user details and the token
         res.status(201).json({
-            user: {
-                id: newUser.id,
-                email: newUser.email,
-                username: newUser.username,
-                token
-            }
+            id: newUser.id,
+            email: newUser.email,
+            username: newUser.username,
+            token
+
         });
         return;
     } catch (error) {

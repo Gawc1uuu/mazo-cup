@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import "./CreateGameForm.css"
-import { parse } from 'path';
+import { useNavigate } from 'react-router-dom';
 
 const CreateGameForm = () => {
+    const navigate = useNavigate()
 
     const [name, setName] = useState<string>('');
     const [location, setLocation] = useState<string>('');
@@ -39,7 +40,7 @@ const CreateGameForm = () => {
                     name,
                     location,
                     date,
-                    createdBy: parsedUser.user.id
+                    createdBy: parsedUser.id
                 })
             })
 
@@ -51,6 +52,8 @@ const CreateGameForm = () => {
             const result = await response.json();
 
             console.log(result)
+
+            navigate("/")
 
         } catch (error) {
             console.error(error)
