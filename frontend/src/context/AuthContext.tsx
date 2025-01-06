@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useEffect, useReducer } from 'react'
+import React, { createContext, ReactNode, useEffect, useReducer, useState } from 'react'
 
 interface Props {
     children: ReactNode
@@ -27,6 +27,7 @@ export type AuthAction =
 export interface AuthContextType {
     state: AuthState;
     dispatch: React.Dispatch<AuthAction>;
+    isLoading: boolean;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>({
@@ -34,6 +35,7 @@ export const AuthContext = createContext<AuthContextType | undefined>({
         user: null
     },
     dispatch: () => { },
+    isLoading: true
 })
 const authReducer = (state: AuthState, action: AuthAction) => {
     switch (action.type) {
@@ -61,6 +63,8 @@ const AuthContextProvider = ({ children }: Props) => {
         user: null
     })
 
+    const [isLoading, setIsLoading] = useState(true)
+
     useEffect(() => {
         const user = localStorage.getItem("user")
 
@@ -69,10 +73,12 @@ const AuthContextProvider = ({ children }: Props) => {
             dispatch({ type: "LOGIN", payload: JSON.parse(user) });
         }
 
+        setIsLoading(false)
+
     }, [])
 
     return (
-        <AuthContext.Provider value={{ state, dispatch }}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={{ state, dispatch, isLoading }}>{children}</AuthContext.Provider>
     )
 }
 

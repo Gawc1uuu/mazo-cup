@@ -13,7 +13,11 @@ import TeamsPicking from "./pages/TeamsPicking";
 
 function App() {
 
-  const { state: AuthState } = useAuthContext();
+  const { state: AuthState, isLoading } = useAuthContext();
+
+  if (isLoading) {
+    return <div>Loading...</div>; // Show a loading spinner or placeholder
+  }
 
   return (
     <div className="App">
@@ -23,11 +27,11 @@ function App() {
           <Routes>
             <Route path="/login" element={!AuthState.user ? <Login /> : <Navigate to="/" />} />
             <Route path="/register" element={!AuthState.user ? <Register /> : <Navigate to="/" />} />
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/waiting-games" element={<WaitingGame />} />
-            <Route path="/create-game" element={<CreateGame />} />
-            <Route path="/teams-picking" element={<MyTeamsPicking />} />
-            <Route path="/teams-picking/:id" element={<TeamsPicking />} />
+            <Route path="/" element={AuthState.user ? <Dashboard /> : <Login />} />
+            <Route path="/waiting-games" element={AuthState.user ? <WaitingGame /> : <Login />} />
+            <Route path="/create-game" element={AuthState.user ? <CreateGame /> : <Login />} />
+            <Route path="/teams-picking" element={AuthState.user ? <MyTeamsPicking /> : <Login />} />
+            <Route path="/teams-picking/:id" element={AuthState.user ? <TeamsPicking /> : <Login />} />
           </Routes>
         </div>
       </BrowserRouter>
