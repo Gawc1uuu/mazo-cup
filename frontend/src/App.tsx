@@ -10,6 +10,7 @@ import CreateGame from "./pages/CreateGame";
 import WaitingGame from "./pages/WaitingGame";
 import MyTeamsPicking from "./pages/MyTeamsPicking";
 import TeamsPicking from "./pages/TeamsPicking";
+import GameDetailsCard from "./components/GameDetails";
 
 function App() {
 
@@ -31,7 +32,7 @@ function App() {
             <Route path="/waiting-games" element={AuthState.user ? <WaitingGame /> : <Login />} />
             <Route path="/create-game" element={AuthState.user ? <CreateGame /> : <Login />} />
             <Route path="/teams-picking" element={AuthState.user ? <MyTeamsPicking /> : <Login />} />
-            <Route path="/teams-picking/:id" element={AuthState.user ? <TeamsPicking /> : <Login />} />
+            <Route path="/teams-picking/:id" element={AuthState.user ? <GameDetailsCard /> : <Login />} />
           </Routes>
         </div>
       </BrowserRouter>
