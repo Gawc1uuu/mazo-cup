@@ -18,7 +18,7 @@ export type Game = {
     players?: Player[];
 }
 
-type GameAction = { type: "SET_GAMES", payload: Game[] } | { type: "ADD_GAME", payload: Game } | { type: "DELETE_GAME", payload: string } | { type: "UPDATE_GAME", payload: Game } | { type: "JOIN_GAME", payload: { gameId: string, player: Player } }
+type GameAction = { type: "SET_GAMES", payload: Game[] } | { type: "ADD_GAME", payload: Game } | { type: "DELETE_GAME", payload: string } | { type: "UPDATE_GAME", payload: Game } | { type: "JOIN_GAME", payload: { gameId: string, player: Player } } | { type: "STATUS_CHANGE", payload: string }
 
 type GameState = {
     games: Game[]
@@ -66,6 +66,10 @@ const gamesReducer = (state: GameState, action: GameAction) => {
                 }),
             };
         }
+        case "STATUS_CHANGE":
+            return {
+                games: state.games.filter((game) => game.id !== action.payload),
+            };
         default:
             throw new Error(`Unhandled action type: ${action}`);
     }

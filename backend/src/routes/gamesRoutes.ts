@@ -3,6 +3,7 @@ import { db } from "../database/db";
 import { GamesTable, PlayersTable, UserTable } from "../database/schema";
 import { eq, and } from "drizzle-orm"
 import dotenv from "dotenv";
+import { emitPlayerJoined, emitStatusChanged } from "../socket/socket";
 dotenv.config()
 
 const router = express.Router();
@@ -121,6 +122,24 @@ router.post("/join", async (req, res) => {
             role: "player",
         }).returning();
 
+        const [player] = await db
+            .select({
+                id: PlayersTable.id,
+                email: UserTable.email,
+                username: UserTable.username,
+                role: PlayersTable.role,
+            })
+            .from(PlayersTable)
+            .leftJoin(UserTable, eq(PlayersTable.userId, UserTable.id))
+            .where(eq(PlayersTable.id, newPlayer.id));
+
+        if (!player) {
+            res.status(500).json({ message: "Failed to fetch player details" });
+            return;
+        }
+
+        const updatedPlayerCount = players.length + 1;
+
         if (players.length + 1 === 6) {
             // Randomly assign two captains
             const allPlayers = [...players, newPlayer];
@@ -142,7 +161,14 @@ router.post("/join", async (req, res) => {
             await db.update(GamesTable)
                 .set({ status: "picking_teams" })
                 .where(eq(GamesTable.id, game.id));
+
+            emitStatusChanged({ gameId: game.id, status: "picking_teams" });
+
         }
+
+
+        emitPlayerJoined({ gameId: game.id, player: player });
+
 
         res.status(200).json(newPlayer)
         return

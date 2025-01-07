@@ -1,14 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import "./WaitingGame.css"
 import useGamesContext from '../hooks/useGamesContext'
 import Card from '../components/Card'
 import useAuthContext from '../hooks/useAuthContext'
 import { Player } from '../context/GamesContext'
+import { io, Socket } from 'socket.io-client'
 
 const WaitingGame = () => {
 
     const { state, dispatch } = useGamesContext()
     const { state: AuthState } = useAuthContext()
+    const socketRef = useRef<Socket | null>(null); // Ref to hold the socket instance
+
 
     useEffect(() => {
 
@@ -36,7 +39,46 @@ const WaitingGame = () => {
 
         getAllWaitingGames()
 
-    }, [])
+    }, [dispatch])
+
+    useEffect(() => {
+        // Initialize socket connection only once
+        if (!socketRef.current) {
+            socketRef.current = io("http://localhost:4000"); // Replace with your backend URL
+        }
+
+        const socket = socketRef.current;
+
+        // Listen for the `player-joined` event
+        socket.on("player-joined", (data: { gameId: string; player: Player }) => {
+
+            console.log("dupa", data.gameId)
+            dispatch({
+                type: "JOIN_GAME",
+                payload: {
+                    gameId: data.gameId,
+                    player: data.player,
+                },
+            });
+        });
+
+        socket.on("status-changed", (data: { gameId: string; status: string }) => {
+            if (data.status === "picking_teams") {
+                dispatch({
+                    type: "STATUS_CHANGE",
+                    payload: data.gameId,
+                });
+            }
+        });
+
+        // Cleanup function to remove listeners and disconnect socket
+        return () => {
+            socket.off("status-changed");
+            socket.off("player-joined"); // Remove specific listener
+            socket.disconnect(); // Disconnect the socket connection
+            socketRef.current = null; // Clear the ref
+        };
+    }, [dispatch]);
 
     const formatDate = (isoDate: any) => {
         const date = new Date(isoDate);
@@ -75,8 +117,7 @@ const WaitingGame = () => {
             role: "player",
         };
 
-        console.log(AuthState.user?.username)
-        console.log(AuthState)
+        console.log(AuthState.user)
 
         try {
             const response = await fetch(`http://localhost:4000/api/games/join`, {
@@ -93,7 +134,7 @@ const WaitingGame = () => {
             }
 
             const data = await response.json();
-            dispatch({ type: "JOIN_GAME", payload: { gameId, player } });
+            console.log("Joined game:", data);
         } catch (error) {
             console.error("Error while joining the game:", error);
         }
