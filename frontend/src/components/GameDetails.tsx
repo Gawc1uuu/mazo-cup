@@ -41,14 +41,7 @@ const GameDetailsCard: React.FC = () => {
 
                 const data = await response.json();
                 console.log(data)
-                setTeamPickingState({
-                    players: data.players,
-                    teams: {
-                        captain1: data.captains.captain1,
-                        captain2: data.captains.captain2,
-                    },
-                    currentTurn: data.currentTurn
-                });
+                setTeamPickingState(data);
             } catch (error) {
                 console.error("Error fetching game details:", error);
             }
@@ -64,6 +57,7 @@ const GameDetailsCard: React.FC = () => {
 
         // Listen for team-updated events
         socket.on("team-updated", (data: TeamPickingState) => {
+            console.log(data)
             setTeamPickingState(data);
         });
 
@@ -78,12 +72,15 @@ const GameDetailsCard: React.FC = () => {
 
     // Handle player click to pick a player
     const handlePlayerClick = (player: Player) => {
+        console.log("dupaaaaa")
         if (!teamPickingState || player.role !== "player") return;
+
+        console.log("dupa")
 
         socketRef.current?.emit("pick-player", {
             gameId,
             playerId: player.id,
-            captainId: teamPickingState.currentTurn,
+            currentTurn
         });
     };
 
@@ -94,6 +91,8 @@ const GameDetailsCard: React.FC = () => {
 
 
     const { players, teams, currentTurn } = teamPickingState!;
+
+    console.log(currentTurn)
 
     return (
         <Card className="GameDetailsCard">

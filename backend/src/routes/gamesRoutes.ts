@@ -4,6 +4,7 @@ import { GamesTable, PlayersTable, UserTable } from "../database/schema";
 import { eq, and } from "drizzle-orm"
 import dotenv from "dotenv";
 import { emitPlayerJoined, emitStatusChanged } from "../socket/socket";
+import { isTemplateSpan } from "typescript";
 dotenv.config()
 
 const router = express.Router();
@@ -244,16 +245,11 @@ router.get("/teams-picking/:id", async (req, res) => {
 
         const gameDetails = game.reduce(
             (acc: any, row: any) => {
-                if (!acc.players) acc.players = [];
-                if (!acc.captains) acc.captains = { captain1: [], captain2: [] };
-
-                if (!acc.info) {
-                    acc.info = {
-                        id: row.game.id,
-                        name: row.game.name,
-                        location: row.game.location,
-                        date: row.game.date,
-                        status: row.game.status,
+                // Ensure the game object is initialized in the accumulator
+                if (!acc[row.game.id]) {
+                    acc[row.game.id] = {
+                        players: [],
+                        teams: { captain1: [], captain2: [] },
                         currentTurn: row.game.currentTurn,
                     };
                 }
@@ -267,24 +263,22 @@ router.get("/teams-picking/:id", async (req, res) => {
                     };
 
                     if (row.player.role === "captain1") {
-                        acc.captains.captain1.push(player);
+                        acc[row.game.id].teams.captain1.push(player);
                     } else if (row.player.role === "captain2") {
-                        acc.captains.captain2.push(player);
+                        acc[row.game.id].teams.captain2.push(player);
                     } else {
-                        acc.players.push(player);
+                        acc[row.game.id].players.push(player);
                     }
                 }
 
                 return acc;
             },
-            { info: null, players: [], captains: { captain1: [], captain2: [] } }
+            {}
         );
 
-
-
-
-        res.status(200).json(gameDetails)
-        return;
+        // Flatten the result to send the first game details (if there's only one game by ID)
+        res.status(200).json(gameDetails[id] || {});
+        return
     } catch (error) {
         console.error(error)
         res.status(500).json({ message: "Something went wrong" })
