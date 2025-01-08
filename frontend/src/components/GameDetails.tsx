@@ -1,31 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Card from "./Card";
 import "./GameDetails.css";
 import { useParams } from "react-router-dom";
-
+import { io, Socket } from "socket.io-client";
 interface Player {
     id: string;
     email: string;
     username: string;
-    role: "player" | "captain";
+    role: "player" | "captain1" | "captain2";
 }
 
-interface Game {
-    id: string;
-    location: string;
-    date: string;
-    name: string;
-    createdBy: string;
-    createdAt: string;
-    status: "waiting" | "picking_teams" | "ready";
-    players?: Player[];
+interface TeamPickingState {
+    players: Player[];
+    teams: {
+        captain1: Player[];
+        captain2: Player[];
+    };
+    currentTurn: "captain1" | "captain2";
 }
 
 
 
 const GameDetailsCard: React.FC = () => {
-    const [gameData, setGameData] = useState<Game | null>(null);
+    const [teamPickingState, setTeamPickingState] = useState<TeamPickingState | null>(null);
     const { id: gameId } = useParams()
+    const socketRef = useRef<Socket | null>(null);
+
 
     useEffect(() => {
         const fetchGameDetails = async () => {
@@ -40,7 +40,8 @@ const GameDetailsCard: React.FC = () => {
                 }
 
                 const data = await response.json();
-                setGameData(data);
+                console.log(data)
+                setTeamPickingState(data);
             } catch (error) {
                 console.error("Error fetching game details:", error);
             }
@@ -49,47 +50,85 @@ const GameDetailsCard: React.FC = () => {
         fetchGameDetails();
     }, [gameId]);
 
-    if (!gameData) {
+    useEffect(() => {
+
+        const socket = io("http://localhost:4000");
+        socketRef.current = socket;
+
+        // Listen for team-updated events
+        socket.on("team-updated", (data: TeamPickingState) => {
+            setTeamPickingState(data);
+        });
+
+
+        return () => {
+            socket.off("team-updated");
+            socket.disconnect();
+        };
+
+    }, [])
+
+
+    // Handle player click to pick a player
+    const handlePlayerClick = (player: Player) => {
+        if (!teamPickingState || player.role !== "player") return;
+
+        socketRef.current?.emit("pick-player", {
+            gameId,
+            playerId: player.id,
+            captainId: teamPickingState.currentTurn,
+        });
+    };
+
+    if (!teamPickingState) {
         return <div>Loading game details...</div>;
     }
 
-    const captains = gameData.players?.filter((player) => player.role === "captain") || [];
-    const players = gameData.players?.filter((player) => player.role === "player") || [];
+
+
+    const { players, teams, currentTurn } = teamPickingState!;
 
     return (
         <Card className="GameDetailsCard">
             <div className="GameDetailsCard-captain">
-                {captains[0] ? (
-                    <div>
+                {teams.captain1.length > 0 ? (
+                    <>
                         <h3>Captain 1</h3>
-                        <p>{captains[0].username}</p>
-                        <p>{captains[0].email}</p>
-                    </div>
+                        <ul>
+                            {teams.captain1.map((player) => (
+                                <li key={player.id}>{player.username} ({player.email})</li>
+                            ))}
+                        </ul>
+                    </>
                 ) : (
-                    <p>No captain assigned</p>
+                    <p>No players picked by Captain 1</p>
                 )}
             </div>
 
             <div className="GameDetailsCard-players">
-                <h3>Players</h3>
+                <h3>Available Players</h3>
                 <ul>
-                    {players.map((player) => (
-                        <li key={player.id}>
+                    {players.map((player: any) => (
+                        <li key={player.id} onClick={() => handlePlayerClick(player)}>
                             {player.username} ({player.email})
                         </li>
                     ))}
                 </ul>
+                <p>Current Turn: {currentTurn === "captain1" ? "Captain 1" : "Captain 2"}</p>
             </div>
 
             <div className="GameDetailsCard-captain">
-                {captains[1] ? (
-                    <div>
+                {teams.captain2.length > 0 ? (
+                    <>
                         <h3>Captain 2</h3>
-                        <p>{captains[1].username}</p>
-                        <p>{captains[1].email}</p>
-                    </div>
+                        <ul>
+                            {teams.captain2.map((player: any) => (
+                                <li key={player.id}>{player.username} ({player.email})</li>
+                            ))}
+                        </ul>
+                    </>
                 ) : (
-                    <p>No captain assigned</p>
+                    <p>No players picked by Captain 2</p>
                 )}
             </div>
         </Card>

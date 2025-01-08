@@ -69,7 +69,6 @@ const AuthContextProvider = ({ children }: Props) => {
         const user = localStorage.getItem("user")
 
         if (user) {
-            console.log("Loaded user from localStorage:", JSON.parse(user));
             dispatch({ type: "LOGIN", payload: JSON.parse(user) });
         }
 

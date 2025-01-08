@@ -1,7 +1,8 @@
 import { boolean, pgEnum, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
 
 const statusEnum = pgEnum("status", ["waiting", "picking_teams", "ready"]);
-const roleEnum = pgEnum("role", ["player", "captain"]);
+const roleEnum = pgEnum("role", ["player", "captain1", "captain2"]);
+const turnEnum = pgEnum("turn", ["captain1", "captain2"])
 
 export const UserTable = pgTable("users", {
     id: uuid("id").primaryKey().defaultRandom(),
@@ -18,6 +19,7 @@ export const GamesTable = pgTable("games", {
     date: timestamp("date").notNull(),
     createdBy: uuid("created_by").references(() => UserTable.id).notNull(),
     status: statusEnum("status"), // statuses can be waiting, team_picking,ready
+    currentTurn: turnEnum("current_turn"),
     createdAt: timestamp("created_at").defaultNow(),
 });
 
