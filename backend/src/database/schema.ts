@@ -1,8 +1,9 @@
-import { boolean, pgEnum, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
+import { pgEnum, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
 
-const statusEnum = pgEnum("status", ["waiting", "picking_teams", "ready"]);
-const roleEnum = pgEnum("role", ["player", "captain1", "captain2"]);
-const turnEnum = pgEnum("turn", ["captain1", "captain2"])
+export const statusEnum = pgEnum('status', ['waiting', 'picking_teams', 'ready']);
+export const roleEnum = pgEnum('role', ['player', 'captain1', 'captain2']);
+export const turnEnum = pgEnum('turn', ['captain1', 'captain2'])
+
 
 export const UserTable = pgTable("users", {
     id: uuid("id").primaryKey().defaultRandom(),

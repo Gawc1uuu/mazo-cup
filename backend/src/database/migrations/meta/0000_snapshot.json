@@ -1,5 +1,5 @@
 {
-  "id": "b385a40c-65a2-406d-8eca-69b1afdc0767",
+  "id": "a8292901-43b6-46c7-88a2-c66a371bb25d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -42,6 +42,13 @@
         "status": {
           "name": "status",
           "type": "status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "current_turn": {
+          "name": "current_turn",
+          "type": "turn",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
@@ -98,9 +105,10 @@
         },
         "role": {
           "name": "role",
-          "type": "varchar(255)",
+          "type": "role",
+          "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "joined_at": {
           "name": "joined_at",
@@ -193,7 +201,34 @@
       }
     }
   },
-  "enums": {},
+  "enums": {
+    "public.role": {
+      "name": "role",
+      "schema": "public",
+      "values": [
+        "player",
+        "captain1",
+        "captain2"
+      ]
+    },
+    "public.status": {
+      "name": "status",
+      "schema": "public",
+      "values": [
+        "waiting",
+        "picking_teams",
+        "ready"
+      ]
+    },
+    "public.turn": {
+      "name": "turn",
+      "schema": "public",
+      "values": [
+        "captain1",
+        "captain2"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "_meta": {

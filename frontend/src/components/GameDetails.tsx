@@ -41,7 +41,14 @@ const GameDetailsCard: React.FC = () => {
 
                 const data = await response.json();
                 console.log(data)
-                setTeamPickingState(data);
+                setTeamPickingState({
+                    players: data.players,
+                    teams: {
+                        captain1: data.captains.captain1,
+                        captain2: data.captains.captain2,
+                    },
+                    currentTurn: data.currentTurn
+                });
             } catch (error) {
                 console.error("Error fetching game details:", error);
             }

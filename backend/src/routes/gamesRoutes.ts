@@ -149,11 +149,11 @@ router.post("/join", async (req, res) => {
             // Update captains in PlayersTable
             await db.transaction(async (trx) => {
                 await trx.update(PlayersTable)
-                    .set({ role: "captain" })
+                    .set({ role: "captain1" })
                     .where(eq(PlayersTable.id, captain1.id));
 
                 await trx.update(PlayersTable)
-                    .set({ role: "captain" })
+                    .set({ role: "captain2" })
                     .where(eq(PlayersTable.id, captain2.id));
             });
 
@@ -242,32 +242,48 @@ router.get("/teams-picking/:id", async (req, res) => {
             .where(eq(GamesTable.id, id))
 
 
-        const result = game.reduce((acc: any, row: any) => {
-            const gameId = row.game.id;
+        const gameDetails = game.reduce(
+            (acc: any, row: any) => {
+                if (!acc.players) acc.players = [];
+                if (!acc.captains) acc.captains = { captain1: [], captain2: [] };
 
-            if (!acc[gameId]) {
-                acc[gameId] = {
-                    ...row.game,
-                    players: [],
-                };
-            }
+                if (!acc.info) {
+                    acc.info = {
+                        id: row.game.id,
+                        name: row.game.name,
+                        location: row.game.location,
+                        date: row.game.date,
+                        status: row.game.status,
+                        currentTurn: row.game.currentTurn,
+                    };
+                }
 
-            if (row.player && row.user) {
-                acc[gameId].players.push({
-                    id: row.user.id,
-                    username: row.user.username,
-                    email: row.user.email,
-                    role: row.player.role,
-                });
-            }
+                if (row.player && row.user) {
+                    const player = {
+                        id: row.user.id,
+                        username: row.user.username,
+                        email: row.user.email,
+                        role: row.player.role,
+                    };
 
-            return acc;
-        }, {});
+                    if (row.player.role === "captain1") {
+                        acc.captains.captain1.push(player);
+                    } else if (row.player.role === "captain2") {
+                        acc.captains.captain2.push(player);
+                    } else {
+                        acc.players.push(player);
+                    }
+                }
 
-        const [singleGameWithPlayers]: any = Object.values(result);
+                return acc;
+            },
+            { info: null, players: [], captains: { captain1: [], captain2: [] } }
+        );
 
 
-        res.status(200).json({ ...singleGameWithPlayers })
+
+
+        res.status(200).json(gameDetails)
         return;
     } catch (error) {
         console.error(error)
