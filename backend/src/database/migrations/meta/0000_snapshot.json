@@ -1,5 +1,5 @@
 {
-  "id": "a8292901-43b6-46c7-88a2-c66a371bb25d",
+  "id": "ffcf9d18-3009-413d-b52b-eea3e1a2df52",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -106,6 +106,13 @@
         "role": {
           "name": "role",
           "type": "role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "team": {
+          "name": "team",
+          "type": "team",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
@@ -218,6 +225,14 @@
         "waiting",
         "picking_teams",
         "ready"
+      ]
+    },
+    "public.team": {
+      "name": "team",
+      "schema": "public",
+      "values": [
+        "captain1",
+        "captain2"
       ]
     },
     "public.turn": {

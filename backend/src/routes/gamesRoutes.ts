@@ -163,6 +163,10 @@ router.post("/join", async (req, res) => {
                 .set({ status: "picking_teams" })
                 .where(eq(GamesTable.id, game.id));
 
+            await db.update(GamesTable)
+                .set({ currentTurn: "captain1" })
+                .where(eq(GamesTable.id, game.id));
+
             emitStatusChanged({ gameId: game.id, status: "picking_teams" });
 
         }
@@ -243,38 +247,43 @@ router.get("/teams-picking/:id", async (req, res) => {
             .where(eq(GamesTable.id, id))
 
 
-        const gameDetails = game.reduce(
-            (acc: any, row: any) => {
-                // Ensure the game object is initialized in the accumulator
-                if (!acc[row.game.id]) {
-                    acc[row.game.id] = {
-                        players: [],
-                        teams: { captain1: [], captain2: [] },
-                        currentTurn: row.game.currentTurn,
-                    };
+        const gameDetails = game.reduce((acc: any, row: any) => {
+            // Initialize the game object if not already set
+            if (!acc[row.game.id]) {
+                acc[row.game.id] = {
+                    players: [], // Players not yet assigned to a team
+                    teams: { captain1: [], captain2: [] }, // Players assigned to teams
+                    currentTurn: row.game.currentTurn, // Current turn
+                };
+            }
+
+            if (row.player && row.user) {
+                const player = {
+                    id: row.user.id,
+                    username: row.user.username,
+                    email: row.user.email,
+                    role: row.player.role,
+                    team: row.player.team, // Include team assignment
+                };
+
+                // Assign captains to their respective teams based on role
+                if (row.player.role === "captain1") {
+                    acc[row.game.id].teams.captain1.push(player);
+                } else if (row.player.role === "captain2") {
+                    acc[row.game.id].teams.captain2.push(player);
                 }
-
-                if (row.player && row.user) {
-                    const player = {
-                        id: row.user.id,
-                        username: row.user.username,
-                        email: row.user.email,
-                        role: row.player.role,
-                    };
-
-                    if (row.player.role === "captain1") {
-                        acc[row.game.id].teams.captain1.push(player);
-                    } else if (row.player.role === "captain2") {
-                        acc[row.game.id].teams.captain2.push(player);
-                    } else {
-                        acc[row.game.id].players.push(player);
-                    }
+                // Assign other players based on the team field
+                else if (player.team === "captain1") {
+                    acc[row.game.id].teams.captain1.push(player);
+                } else if (player.team === "captain2") {
+                    acc[row.game.id].teams.captain2.push(player);
+                } else {
+                    acc[row.game.id].players.push(player);
                 }
+            }
 
-                return acc;
-            },
-            {}
-        );
+            return acc;
+        }, {});
 
         // Flatten the result to send the first game details (if there's only one game by ID)
         res.status(200).json(gameDetails[id] || {});

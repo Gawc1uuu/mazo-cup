@@ -3,6 +3,7 @@ import Card from "./Card";
 import "./GameDetails.css";
 import { useParams } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
+import useAuthContext from "../hooks/useAuthContext";
 interface Player {
     id: string;
     email: string;
@@ -25,6 +26,7 @@ const GameDetailsCard: React.FC = () => {
     const [teamPickingState, setTeamPickingState] = useState<TeamPickingState | null>(null);
     const { id: gameId } = useParams()
     const socketRef = useRef<Socket | null>(null);
+    const { state } = useAuthContext()
 
 
     useEffect(() => {
@@ -80,7 +82,8 @@ const GameDetailsCard: React.FC = () => {
         socketRef.current?.emit("pick-player", {
             gameId,
             playerId: player.id,
-            currentTurn
+            currentTurn,
+            emittedBy: state.user?.id
         });
     };
 

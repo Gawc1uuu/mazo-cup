@@ -3,6 +3,7 @@ import { pgEnum, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
 export const statusEnum = pgEnum('status', ['waiting', 'picking_teams', 'ready']);
 export const roleEnum = pgEnum('role', ['player', 'captain1', 'captain2']);
 export const turnEnum = pgEnum('turn', ['captain1', 'captain2'])
+export const teamEnum = pgEnum('team', ['captain1', 'captain2'])
 
 
 export const UserTable = pgTable("users", {
@@ -30,5 +31,6 @@ export const PlayersTable = pgTable("players", {
     gameId: uuid("game_id").references(() => GamesTable.id).notNull(),
     userId: uuid("user_id").references(() => UserTable.id).notNull(),
     role: roleEnum("role"), //can be captain or player
+    team: teamEnum('team'),
     joinedAt: timestamp("joined_at").defaultNow(),
 });
