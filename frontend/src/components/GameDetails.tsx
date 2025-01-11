@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Card from "./Card";
 import "./GameDetails.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
 import useAuthContext from "../hooks/useAuthContext";
 interface Player {
@@ -23,6 +23,7 @@ interface TeamPickingState {
 
 
 const GameDetailsCard: React.FC = () => {
+    const navigate = useNavigate()
     const [teamPickingState, setTeamPickingState] = useState<TeamPickingState | null>(null);
     const { id: gameId } = useParams()
     const socketRef = useRef<Socket | null>(null);
@@ -61,6 +62,12 @@ const GameDetailsCard: React.FC = () => {
         socket.on("team-updated", (data: TeamPickingState) => {
             console.log(data)
             setTeamPickingState(data);
+        });
+
+        socket.on("status-changed", (data: { gameId: string; status: string }) => {
+            if (data.status === "ready" && data.gameId === gameId) {
+                navigate("/"); // Redirect to home page
+            }
         });
 
 

@@ -296,6 +296,25 @@ router.get("/teams-picking/:id", async (req, res) => {
 })
 
 
+router.get("/ready", async (req, res) => {
+    try {
+
+        const readyGames = await db.select().from(GamesTable)
+            .innerJoin(PlayersTable, eq(PlayersTable.gameId, GamesTable.id))
+            .innerJoin(UserTable, eq(UserTable.id, PlayersTable.userId))
+            .where(eq(GamesTable.status, "ready"))
+
+        console.log(readyGames)
+
+        res.status(200).json(readyGames)
+        return
+    } catch (error) {
+        res.status(500).json({ messsage: "Something went wrong" })
+        return
+    }
+})
+
+
 
 
 

@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
 import { GamesTable, PlayersTable, UserTable } from "../database/schema";
 import { db } from "../database/db";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
 let io: any; // WebSocket instance
 
@@ -86,6 +86,22 @@ export const setupWebSocket = (server: any) => {
 
                 // Emit updated game state
                 const updatedGame = await fetchGameDetails(gameId);
+
+                const unassignedPlayers = await db
+                    .select()
+                    .from(PlayersTable)
+                    .where(and(
+                        eq(PlayersTable.gameId, gameId),
+                        eq(PlayersTable.team, sql`NULL`),
+                        eq(PlayersTable.role, 'player') // Check for players without a team
+                    ));
+
+                if (unassignedPlayers.length === 0) {
+                    // Update game status to "ready"
+                    await db.update(GamesTable).set({ status: "ready" }).where(eq(GamesTable.id, gameId));
+                    io.emit("status-changed", { gameId, status: "ready" });
+                }
+
                 console.log(updatedGame)
                 io.emit("team-updated", updatedGame[gameId]);
             } catch (error) {

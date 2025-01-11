@@ -31,6 +31,6 @@ export const PlayersTable = pgTable("players", {
     gameId: uuid("game_id").references(() => GamesTable.id).notNull(),
     userId: uuid("user_id").references(() => UserTable.id).notNull(),
     role: roleEnum("role"), //can be captain or player
-    team: teamEnum('team'),
+    team: varchar('team', { length: 10 }),
     joinedAt: timestamp("joined_at").defaultNow(),
 });
