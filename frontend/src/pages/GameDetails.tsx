@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import Card from "./Card";
+import Card from "../components/Card";
 import "./GameDetails.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { io, Socket } from "socket.io-client";

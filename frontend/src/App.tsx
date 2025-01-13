@@ -10,7 +10,8 @@ import CreateGame from "./pages/CreateGame";
 import WaitingGame from "./pages/WaitingGame";
 import MyTeamsPicking from "./pages/MyTeamsPicking";
 import TeamsPicking from "./pages/TeamsPicking";
-import GameDetailsCard from "./components/GameDetails";
+import GameDetailsCard from "./pages/GameDetails";
+import ReadyGame from "./pages/ReadyGame";
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
             <Route path="/create-game" element={AuthState.user ? <CreateGame /> : <Login />} />
             <Route path="/teams-picking" element={AuthState.user ? <MyTeamsPicking /> : <Login />} />
             <Route path="/teams-picking/:id" element={AuthState.user ? <GameDetailsCard /> : <Login />} />
+            <Route path="/ready/:id" element={AuthState.user ? <ReadyGame /> : <Login />} />
           </Routes>
         </div>
       </BrowserRouter>

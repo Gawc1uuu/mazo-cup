@@ -1,0 +1,74 @@
+.GameDetailsCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    gap: 20px;
+}
+
+.GameDetailsCard-captain,
+.GameDetailsCard-players {
+    flex: 1;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.GameDetailsCard-captain h3,
+.GameDetailsCard-players h3 {
+    font-size: 18px;
+    color: #E78121;
+    margin-bottom: 10px;
+}
+
+.GameDetailsCard-captain ul,
+.GameDetailsCard-players ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.GameDetailsCard-captain ul li,
+.GameDetailsCard-players ul li {
+    margin: 8px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f4f4f4;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.GameDetailsCard-captain ul li:hover,
+.GameDetailsCard-players ul li:hover {
+    background-color: #e6e6e6;
+}
+
+.GameDetailsCard-players p {
+    font-size: 16px;
+    color: #555;
+    margin-top: 10px;
+}
+
+.GameDetailsCard-players li {
+    cursor: pointer;
+}
+
+.GameDetailsCard-players li:hover {
+    background-color: #ffedd5;
+}
+
+.GameDetailsCard-captain p {
+    color: #999;
+    font-size: 14px;
+    margin-top: 10px;
+}

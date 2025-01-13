@@ -1,0 +1,72 @@
+.ReadyGame-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.ReadyGame-info-container {
+    text-align: center;
+}
+
+.ReadyGame-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.ReadyGame-info {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+.ReadyGame-teams {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.Team {
+    flex: 1;
+    margin: 0 10px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.Team h2 {
+    text-align: center;
+    color: #E78121;
+    margin-bottom: 15px;
+}
+
+.Team ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.Team ul li {
+    margin: 10px 0;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.Team ul li:last-child {
+    border-bottom: none;
+}
+
+.Team-left {
+    margin-right: 10px;
+}
+
+.Team-right {
+    margin-left: 10px;
+}

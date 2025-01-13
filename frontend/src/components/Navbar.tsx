@@ -14,7 +14,9 @@ const Navbar = () => {
         <nav className='Navbar'>
             <div className="Navbar-container">
                 <div className="Navbar-Logo">
-                    <img src={logo.toString()} alt="App Logo" />
+                    <Link to="/">
+                        <img src={logo.toString()} alt="App Logo" />
+                    </Link>
                 </div>
                 {/* buttons div */}
                 <div className="Navbar-navigation">

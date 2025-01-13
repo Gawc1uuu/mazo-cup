@@ -55,7 +55,7 @@ const gamesReducer = (state: GameState, action: GameAction) => {
                         const isPlayerInTheGame = game.players?.some((p) => p.id === action.payload.player.id)
                         if (isPlayerInTheGame) {
                             console.log("player is already in the game")
-                            // return game;
+                            return game;
                         }
                         return {
                             ...game,
