@@ -40,3 +40,8 @@
     background-color: #ffca98;
     cursor: not-allowed;
 }
+
+.WaitingGames-success {
+    margin-bottom: 10px;
+    text-align: center;
+}

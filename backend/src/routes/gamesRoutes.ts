@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express"
 import { db } from "../database/db";
 import { GamesTable, PlayersTable, UserTable } from "../database/schema";
-import { eq, and } from "drizzle-orm"
+import { eq, and, desc } from "drizzle-orm"
 import dotenv from "dotenv";
 import { emitPlayerJoined, emitStatusChanged } from "../socket/socket";
 dotenv.config()
@@ -47,6 +47,7 @@ router.get("/all-waiting", async (req, res) => {
                 user: UserTable
             })
             .from(GamesTable)
+            .orderBy(desc(GamesTable.createdAt))
             .leftJoin(PlayersTable, eq(GamesTable.id, PlayersTable.gameId))
             .leftJoin(UserTable, eq(PlayersTable.userId, UserTable.id))
             .where(eq(GamesTable.status, "waiting"));
@@ -149,11 +150,11 @@ router.post("/join", async (req, res) => {
             // Update captains in PlayersTable
             await db.transaction(async (trx) => {
                 await trx.update(PlayersTable)
-                    .set({ role: "captain1" })
+                    .set({ role: "captain1", team: "captain1" })
                     .where(eq(PlayersTable.id, captain1.id));
 
                 await trx.update(PlayersTable)
-                    .set({ role: "captain2" })
+                    .set({ role: "captain2", team: "captain2" })
                     .where(eq(PlayersTable.id, captain2.id));
             });
 
@@ -307,6 +308,7 @@ router.get("/ready", async (req, res) => {
         const readyGames = await db
             .select()
             .from(GamesTable)
+            .orderBy(desc(GamesTable.createdAt))
             .innerJoin(PlayersTable, eq(GamesTable.id, PlayersTable.gameId))
             .where(
                 and(

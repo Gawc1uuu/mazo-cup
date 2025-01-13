@@ -4,6 +4,8 @@ import "./GameDetails.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { io, Socket } from "socket.io-client";
 import useAuthContext from "../hooks/useAuthContext";
+import { ClipLoader } from "react-spinners";
+
 interface Player {
     id: string;
     email: string;
@@ -28,25 +30,35 @@ const GameDetailsCard: React.FC = () => {
     const { id: gameId } = useParams()
     const socketRef = useRef<Socket | null>(null);
     const { state } = useAuthContext()
+    const [error, setError] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
 
     useEffect(() => {
         const fetchGameDetails = async () => {
+            setIsLoading(true)
+            setError(null)
             try {
                 const response = await fetch(`http://localhost:4000/api/games/teams-picking/${gameId}`, {
                     method: "GET",
                 });
 
                 if (!response.ok) {
-                    console.error("Failed to fetch game details");
+                    setIsLoading(false)
+                    const errData = await response.json();
+                    console.log(errData)
+                    setError(errData.message || "Failed to fetch game details");
                     return;
                 }
 
                 const data = await response.json();
                 console.log(data)
                 setTeamPickingState(data);
+                setIsLoading(false)
             } catch (error) {
-                console.error("Error fetching game details:", error);
+                setError("An error occurred while fetching game details");
+            } finally {
+                setIsLoading(false);
             }
         };
 
@@ -94,8 +106,13 @@ const GameDetailsCard: React.FC = () => {
         });
     };
 
-    if (!teamPickingState) {
-        return <div>Loading game details...</div>;
+    if (isLoading) {
+        return (
+            <div className="GameDetails-loading">
+                <ClipLoader size={50} color="#E78121" />
+                <p>Loading game details...</p>
+            </div>
+        );
     }
 
 
@@ -106,6 +123,7 @@ const GameDetailsCard: React.FC = () => {
 
     return (
         <Card className="GameDetailsCard">
+            {error && <div className="ErrorDialog">{error}</div>}
             <div className="GameDetailsCard-captain">
                 {teams.captain1.length > 0 ? (
                     <>

@@ -27,6 +27,7 @@ const Navbar = () => {
                     }
                     {AuthState.user &&
                         <>
+                            <p>Hello, {AuthState.user.email}</p>
                             <Link className="Navbar-link" to="/create-game">Create Game</Link>
                             <Link className="Navbar-link" to="/waiting-games">Join Game</Link>
                             <Link className="Navbar-link" to="/teams-picking">Pick Teams</Link>

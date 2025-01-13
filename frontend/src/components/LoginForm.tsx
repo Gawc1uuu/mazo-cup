@@ -1,73 +1,73 @@
-import React, { useState } from 'react'
-import "./LoginForm.css"
-import useAuthContext from '../hooks/useAuthContext'
+import React, { useState } from "react";
+import "./LoginForm.css";
+import useAuthContext from "../hooks/useAuthContext";
 
 const LoginForm = () => {
-    const [email, setEmail] = useState<string>('')
-    const [password, setPassword] = useState<string>('')
-    const [checked, setChecked] = useState<boolean>(false)
-    const { dispatch } = useAuthContext()
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [checked, setChecked] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const { dispatch } = useAuthContext();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setChecked(e.target.checked)
-    }
+        setChecked(e.target.checked);
+    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        console.log(email)
-        console.log(password)
-        console.log(checked)
+        e.preventDefault();
+        setError(null); // Reset error state before submission
 
-        const res = await fetch("http://localhost:4000/api/user/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json", // Specify the correct content type
-            },
-            body: JSON.stringify({
-                email,
-                password,
-                checked
-            })
-        })
+        try {
+            const res = await fetch("http://localhost:4000/api/user/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                    checked,
+                }),
+            });
 
-        if (!res.ok) {
-            const errorData = await res.json();
-            console.error("Registration failed:", errorData);
-            return;
+            if (!res.ok) {
+                const errorData = await res.json();
+                setError(errorData.message || "Failed to login.");
+                return;
+            }
+
+            const data = await res.json();
+            dispatch({ type: "LOGIN", payload: data });
+            setEmail("");
+            setPassword("");
+            setChecked(false);
+        } catch (err) {
+            setError("An error occurred while logging in.");
         }
-
-        const data = await res.json()
-        console.log(data)
-
-        dispatch({ type: "LOGIN", payload: data })
-        setEmail('')
-        setPassword('')
-        setChecked(false)
-    }
+    };
 
     return (
-        <form className='LoginForm' onSubmit={handleSubmit}>
+        <form className="LoginForm" onSubmit={handleSubmit}>
             <input
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
                 type="email"
                 placeholder="example@email.com"
-                className='LoginForm-input'
+                className="LoginForm-input"
+                required
             />
             <input
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
                 type="password"
                 placeholder="password"
-                className='LoginForm-input'
+                className="LoginForm-input"
+                required
             />
-            <label className='LoginForm-checkbox'>
-                <input type="checkbox" checked={checked} onChange={handleChange} />
-                I agree for processing my personal data
-            </label>
-            <button className='LoginForm-button'>Login</button>
+            <button className="LoginForm-button">Login</button>
+            {error && <div className="ErrorDialog">{error}</div>}
         </form>
-    )
-}
+    );
+};
 
-export default LoginForm
+export default LoginForm;

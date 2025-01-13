@@ -1,45 +1,48 @@
-import React, { useEffect, useRef } from 'react'
-import "./WaitingGame.css"
-import useGamesContext from '../hooks/useGamesContext'
-import Card from '../components/Card'
-import useAuthContext from '../hooks/useAuthContext'
-import { Player } from '../context/GamesContext'
-import { io, Socket } from 'socket.io-client'
+import React, { useEffect, useRef, useState } from "react";
+import "./WaitingGame.css";
+import useGamesContext from "../hooks/useGamesContext";
+import Card from "../components/Card";
+import useAuthContext from "../hooks/useAuthContext";
+import { Player } from "../context/GamesContext";
+import { io, Socket } from "socket.io-client";
+import { ClipLoader } from "react-spinners";
 
 const WaitingGame = () => {
-
-    const { state, dispatch } = useGamesContext()
-    const { state: AuthState } = useAuthContext()
+    const { state, dispatch } = useGamesContext();
+    const { state: AuthState } = useAuthContext();
     const socketRef = useRef<Socket | null>(null); // Ref to hold the socket instance
-
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
 
     useEffect(() => {
-
         const getAllWaitingGames = async () => {
-            try {
+            setIsLoading(true);
+            setError(null);
 
+            try {
                 const response = await fetch("http://localhost:4000/api/games/all-waiting", {
-                    method: "GET"
-                })
+                    method: "GET",
+                });
 
                 if (!response.ok) {
-                    console.log("something went wrong")
+                    const errData = await response.json();
+                    setError(errData.message || "Failed to fetch waiting games");
+                    setIsLoading(false);
+                    return;
                 }
 
-                const data = await response.json()
-
-                dispatch({ type: "SET_GAMES", payload: data.games })
-
-
+                const data = await response.json();
+                dispatch({ type: "SET_GAMES", payload: data.games });
             } catch (error) {
-                console.error(error)
+                setError("An error occurred while fetching waiting games");
+            } finally {
+                setIsLoading(false);
             }
-        }
+        };
 
-
-        getAllWaitingGames()
-
-    }, [dispatch])
+        getAllWaitingGames();
+    }, [dispatch]);
 
     useEffect(() => {
         // Initialize socket connection only once
@@ -51,8 +54,6 @@ const WaitingGame = () => {
 
         // Listen for the `player-joined` event
         socket.on("player-joined", (data: { gameId: string; player: Player }) => {
-
-            console.log("dupa", data.gameId)
             dispatch({
                 type: "JOIN_GAME",
                 payload: {
@@ -62,21 +63,26 @@ const WaitingGame = () => {
             });
         });
 
+        // Listen for the `status-changed` event
         socket.on("status-changed", (data: { gameId: string; status: string }) => {
             if (data.status === "picking_teams") {
-                dispatch({
-                    type: "STATUS_CHANGE",
-                    payload: data.gameId,
-                });
+                setSuccess("Creating game...");
+                setTimeout(() => {
+                    setSuccess(null); // Clear success message after 3 seconds
+                    dispatch({
+                        type: "STATUS_CHANGE",
+                        payload: data.gameId,
+                    });
+                }, 3000);
             }
         });
 
         // Cleanup function to remove listeners and disconnect socket
         return () => {
             socket.off("status-changed");
-            socket.off("player-joined"); // Remove specific listener
-            socket.disconnect(); // Disconnect the socket connection
-            socketRef.current = null; // Clear the ref
+            socket.off("player-joined");
+            socket.disconnect();
+            socketRef.current = null;
         };
     }, [dispatch]);
 
@@ -90,10 +96,14 @@ const WaitingGame = () => {
         const ordinalSuffix = (n: any) => {
             if (n > 3 && n < 21) return "th";
             switch (n % 10) {
-                case 1: return "st";
-                case 2: return "nd";
-                case 3: return "rd";
-                default: return "th";
+                case 1:
+                    return "st";
+                case 2:
+                    return "nd";
+                case 3:
+                    return "rd";
+                default:
+                    return "th";
             }
         };
 
@@ -111,13 +121,11 @@ const WaitingGame = () => {
 
     const joinGame = async (gameId: string) => {
         const player: Player = {
-            id: AuthState.user?.id!, // Replace with the actual current player ID
-            email: AuthState.user?.email!, // Replace with current player details
+            id: AuthState.user?.id!,
+            email: AuthState.user?.email!,
             username: AuthState.user?.username!,
             role: "player",
         };
-
-        console.log(AuthState.user)
 
         try {
             const response = await fetch(`http://localhost:4000/api/games/join`, {
@@ -129,36 +137,63 @@ const WaitingGame = () => {
             });
 
             if (!response.ok) {
-                console.error("Failed to join the game");
+                const errData = await response.json();
+                setError(errData.message || "Failed to join the game");
                 return;
             }
 
             const data = await response.json();
             console.log("Joined game:", data);
         } catch (error) {
-            console.error("Error while joining the game:", error);
+            setError("An error occurred while joining the game");
         }
     };
 
+    if (isLoading) {
+        return (
+            <div className="WaitingGames-loading">
+                <ClipLoader size={50} color="#E78121" />
+                <p>Loading waiting games...</p>
+            </div>
+        );
+    }
 
+    if (error) {
+        return (
+            <div className="WaitingGames-error">
+                <p className="ErrorDialog">{error}</p>
+            </div>
+        );
+    }
 
     return (
-        <div className='WaitingGames'>
-            {state.games.map(game => (
-                <Card key={game.id} className='GameCard'>
-                    <div className='GameCard-container'>
+        <div className="WaitingGames">
+
+            {state.games.map((game) => (
+                <Card key={game.id} className="GameCard">
+                    <div className="GameCard-container">
                         <h3>{game.location}</h3>
                         <p>Location {game.location}</p>
                         <p>Date {formatDate(game.date)}</p>
-                        <p>status {game.status}</p>
+                        <p>Status {game.status}</p>
                         <p>Players count {`${game.players?.length}/6`}</p>
-                        <button className="WaitingGame-button" onClick={() => joinGame(game.id)}>Join Game</button>
-                        {/* <button className="WaitingGame-button" onClick={() => joinGame(game.id)} disabled={game.players?.some((p) => p.id === AuthState.user?.id)}>Join Game</button> */}
+                        <button
+                            className="WaitingGame-button"
+                            onClick={() => joinGame(game.id)}
+                            disabled={game.players?.some((p) => p.id === AuthState.user?.id)}
+                        >
+                            Join Game
+                        </button>
                     </div>
+                    {success && (
+                        <div className="WaitingGames-success">
+                            <p className="SuccessDialog">{success}</p>
+                        </div>
+                    )}
                 </Card>
             ))}
         </div>
-    )
-}
+    );
+};
 
-export default WaitingGame
+export default WaitingGame;

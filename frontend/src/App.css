@@ -12,3 +12,28 @@
     justify-content: flex-start;
     margin-top: 20px;
 }
+
+.ErrorDialog {
+    background-color: #ffe5e5;
+    color: #b30000;
+    border: 1px solid #ff0000;
+    border-radius: 8px;
+    padding: 5px 5px;
+    font-style: italic;
+    font-size: 16px;
+    text-align: center;
+    margin: 0px auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 90%;
+}
+
+.SuccessDialog {
+    color: #005500;
+    background-color: #e5ffe5;
+    border: 1px solid #00aa00;
+    border-radius: 8px;
+    padding: 5px;
+    font-style: italic;
+    font-size: 14px;
+    margin-bottom: 5px;
+}

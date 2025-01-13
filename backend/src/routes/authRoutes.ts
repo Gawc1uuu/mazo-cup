@@ -16,12 +16,14 @@ router.post("/login", async (req: Request, res: Response) => {
 
         if (!existingUser) {
             res.status(404).json({ message: "User not found" })
+            return;
         }
 
         const isValidPassword = await bcrypt.compare(password, existingUser.password);
 
         if (!isValidPassword) {
             res.status(401).json({ message: "Bad password" })
+            return;
         }
         const token = jwt.sign({ userId: existingUser.id }, process.env.SECRET!, { expiresIn: "7d" })
 

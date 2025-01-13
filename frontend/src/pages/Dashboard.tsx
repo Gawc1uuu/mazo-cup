@@ -1,9 +1,10 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import useAuthContext from "../hooks/useAuthContext"
 import useGamesContext from "../hooks/useGamesContext"
 import Card from "../components/Card"
 import "./Dashboard.css"
 import { Link } from "react-router-dom"
+import { ClipLoader } from "react-spinners"
 
 const formatDate = (isoDate: any) => {
     const date = new Date(isoDate);
@@ -38,21 +39,54 @@ const formatDate = (isoDate: any) => {
 const Dashboard = () => {
     const { state: AuthState } = useAuthContext()
     const { state, dispatch } = useGamesContext()
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+
 
     useEffect(() => {
         const fetchAllReadyGames = async () => {
-            const res = await fetch(`http://localhost:4000/api/games/ready?userId=${AuthState.user?.id}`, { method: "GET" })
-            if (!res.ok) {
-                console.error(res)
-                return
-            }
+            setIsLoading(true);
+            setError(null); // Reset error state
 
-            const data = await res.json()
-            console.log(data)
-            dispatch({ type: "SET_GAMES", payload: data })
-        }
-        fetchAllReadyGames()
-    }, [])
+            try {
+                const res = await fetch(`http://localhost:4000/api/games/ready?userId=${AuthState.user?.id}`, { method: "GET" });
+
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    setError(errorData.message || "Failed to fetch games.");
+                    setIsLoading(false);
+                    return;
+                }
+
+                const data = await res.json();
+                dispatch({ type: "SET_GAMES", payload: data });
+            } catch (err) {
+                setError("An error occurred while fetching games.");
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchAllReadyGames();
+    }, [dispatch]);
+
+
+    if (isLoading) {
+        return (
+            <div className="Dashboard-loading">
+                <ClipLoader size={50} color="#E78121" />
+                <p>Loading games...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="ErrorDialog">
+                <p>{error}</p>
+            </div>
+        );
+    }
 
 
     return (
