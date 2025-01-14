@@ -44,11 +44,11 @@ const MyTeamsPicking = () => {
     }, [AuthState.user?.id])
 
     return (
-        <div className='MyTeamsPicking'>
-            <div className='MyTeamsPicking-container'>
+        <div className="MyTeamsPicking">
+            <div className="MyTeamsPicking-container">
                 {state.games.map((game) => (
                     <Card key={game.id} className="MyTeamsPicking-card">
-                        <div className='MyTeamsPicking-card-container'>
+                        <div className="MyTeamsPicking-card-container">
                             <h3>{game.name}</h3>
                             <p>Location: {game.location}</p>
                             <p>Date: {new Date(game.date).toLocaleString()}</p>
@@ -63,9 +63,8 @@ const MyTeamsPicking = () => {
                     </Card>
                 ))}
             </div>
-
         </div>
-    )
+    );
 }
 
 export default MyTeamsPicking

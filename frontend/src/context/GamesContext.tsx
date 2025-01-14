@@ -5,6 +5,7 @@ export type Player = {
     email: string;
     username: string;
     role: "player" | "captain";
+    userId?: string;
 }
 
 export type Game = {
@@ -52,15 +53,26 @@ const gamesReducer = (state: GameState, action: GameAction) => {
             return {
                 games: state.games.map((game) => {
                     if (game.id === action.payload.gameId) {
-                        const isPlayerInTheGame = game.players?.some((p) => p.id === action.payload.player.id)
+                        const players = game.players || [];
+                        console.log("Existing players:", players);
+                        console.log("New player:", action.payload.player);
+
+                        const isPlayerInTheGame = game.players?.some((p) => p.id === action.payload.player.userId)
+                        console.log(isPlayerInTheGame)
                         if (isPlayerInTheGame) {
                             console.log("player is already in the game")
                             return game;
                         }
+
+
+                        const updatedPlayers = [...players, action.payload.player];
+                        console.log("Updated players:", updatedPlayers);
+
                         return {
                             ...game,
-                            players: game.players ? [...game.players, action.payload.player] : [action.payload.player]
+                            players: updatedPlayers
                         }
+
                     }
                     return game;
                 }),

@@ -46,12 +46,15 @@ const GameDetailsCard: React.FC = () => {
                 if (!response.ok) {
                     setIsLoading(false)
                     const errData = await response.json();
+                    console.log("dupaaaaa")
+
                     console.log(errData)
                     setError(errData.message || "Failed to fetch game details");
                     return;
                 }
 
                 const data = await response.json();
+                console.log("dupaaaaa")
                 console.log(data)
                 setTeamPickingState(data);
                 setIsLoading(false)
@@ -93,20 +96,18 @@ const GameDetailsCard: React.FC = () => {
 
     // Handle player click to pick a player
     const handlePlayerClick = (player: Player) => {
-        console.log("dupaaaaa")
         if (!teamPickingState || player.role !== "player") return;
 
-        console.log("dupa")
 
         socketRef.current?.emit("pick-player", {
             gameId,
             playerId: player.id,
-            currentTurn,
+            currentTurn: teamPickingState.currentTurn,
             emittedBy: state.user?.id
         });
     };
 
-    if (isLoading) {
+    if (isLoading || !teamPickingState) {
         return (
             <div className="GameDetails-loading">
                 <ClipLoader size={50} color="#E78121" />
@@ -117,19 +118,15 @@ const GameDetailsCard: React.FC = () => {
 
 
 
-    const { players, teams, currentTurn } = teamPickingState!;
-
-    console.log(currentTurn)
-
     return (
         <Card className="GameDetailsCard">
             {error && <div className="ErrorDialog">{error}</div>}
             <div className="GameDetailsCard-captain">
-                {teams.captain1.length > 0 ? (
+                {teamPickingState.teams.captain1.length > 0 ? (
                     <>
                         <h3>Captain 1</h3>
                         <ul>
-                            {teams.captain1.map((player) => (
+                            {teamPickingState.teams.captain1.map((player) => (
                                 <li key={player.id}>{player.username} ({player.email})</li>
                             ))}
                         </ul>
@@ -142,21 +139,21 @@ const GameDetailsCard: React.FC = () => {
             <div className="GameDetailsCard-players">
                 <h3>Available Players</h3>
                 <ul>
-                    {players.map((player: any) => (
+                    {teamPickingState.players.map((player: any) => (
                         <li key={player.id} onClick={() => handlePlayerClick(player)}>
                             {player.username} ({player.email})
                         </li>
                     ))}
                 </ul>
-                <p>Current Turn: {currentTurn === "captain1" ? "Captain 1" : "Captain 2"}</p>
+                <p>Current Turn: {teamPickingState.currentTurn === "captain1" ? "Captain 1" : "Captain 2"}</p>
             </div>
 
             <div className="GameDetailsCard-captain">
-                {teams.captain2.length > 0 ? (
+                {teamPickingState.teams.captain2.length > 0 ? (
                     <>
                         <h3>Captain 2</h3>
                         <ul>
-                            {teams.captain2.map((player: any) => (
+                            {teamPickingState.teams.captain2.map((player: any) => (
                                 <li key={player.id}>{player.username} ({player.email})</li>
                             ))}
                         </ul>

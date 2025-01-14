@@ -66,10 +66,11 @@ router.get("/all-waiting", async (req, res) => {
 
             if (row.player && row.user) {
                 acc[gameId].players.push({
-                    id: row.user.id,
+                    id: row.player.id,
                     username: row.user.username,
                     email: row.user.email,
                     role: row.player.role,
+                    userId: row.user.id
                 })
             }
             return acc;
@@ -129,6 +130,7 @@ router.post("/join", async (req, res) => {
                 email: UserTable.email,
                 username: UserTable.username,
                 role: PlayersTable.role,
+                userId: UserTable.id
             })
             .from(PlayersTable)
             .leftJoin(UserTable, eq(PlayersTable.userId, UserTable.id))

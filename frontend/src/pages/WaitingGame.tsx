@@ -54,6 +54,8 @@ const WaitingGame = () => {
 
         // Listen for the `player-joined` event
         socket.on("player-joined", (data: { gameId: string; player: Player }) => {
+            console.log("dupaaaaa")
+            console.log(data.player)
             dispatch({
                 type: "JOIN_GAME",
                 payload: {
@@ -65,16 +67,10 @@ const WaitingGame = () => {
 
         // Listen for the `status-changed` event
         socket.on("status-changed", (data: { gameId: string; status: string }) => {
-            if (data.status === "picking_teams") {
-                setSuccess("Creating game...");
-                setTimeout(() => {
-                    setSuccess(null); // Clear success message after 3 seconds
-                    dispatch({
-                        type: "STATUS_CHANGE",
-                        payload: data.gameId,
-                    });
-                }, 3000);
-            }
+            dispatch({
+                type: "STATUS_CHANGE",
+                payload: data.gameId,
+            });
         });
 
         // Cleanup function to remove listeners and disconnect socket
@@ -125,6 +121,7 @@ const WaitingGame = () => {
             email: AuthState.user?.email!,
             username: AuthState.user?.username!,
             role: "player",
+            userId: AuthState.user?.id!
         };
 
         try {
@@ -141,8 +138,8 @@ const WaitingGame = () => {
                 setError(errData.message || "Failed to join the game");
                 return;
             }
-
             const data = await response.json();
+
             console.log("Joined game:", data);
         } catch (error) {
             setError("An error occurred while joining the game");
@@ -158,17 +155,12 @@ const WaitingGame = () => {
         );
     }
 
-    if (error) {
-        return (
-            <div className="WaitingGames-error">
-                <p className="ErrorDialog">{error}</p>
-            </div>
-        );
-    }
 
     return (
         <div className="WaitingGames">
-
+            {error && <div className="WaitingGames-error">
+                <p className="ErrorDialog">{error}</p>
+            </div>}
             {state.games.map((game) => (
                 <Card key={game.id} className="GameCard">
                     <div className="GameCard-container">
@@ -180,7 +172,7 @@ const WaitingGame = () => {
                         <button
                             className="WaitingGame-button"
                             onClick={() => joinGame(game.id)}
-                            disabled={game.players?.some((p) => p.id === AuthState.user?.id)}
+                            disabled={game.players?.some((p) => p.userId === AuthState.user?.id)}
                         >
                             Join Game
                         </button>
