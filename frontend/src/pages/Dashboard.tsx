@@ -7,6 +7,7 @@ import { Link } from "react-router-dom"
 import { ClipLoader } from "react-spinners"
 import HeroSection from "../components/dashboard/HeroSection"
 import About from "../components/dashboard/About"
+import Info from "../components/dashboard/Info"
 
 const formatDate = (isoDate: any) => {
     const date = new Date(isoDate);
@@ -39,7 +40,6 @@ const formatDate = (isoDate: any) => {
 
 
 const Dashboard = () => {
-    const { state: AuthState } = useAuthContext()
 
 
 
@@ -47,6 +47,7 @@ const Dashboard = () => {
         <>
             <HeroSection />
             <About />
+            <Info />
         </>
     )
 }

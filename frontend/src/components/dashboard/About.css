@@ -53,15 +53,9 @@
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
-    /* Horizontally centers tiles within a row */
     align-items: center;
-    /* Vertically centers rows of tiles if container has extra space */
     gap: var(--tile-gap);
-    /* Use the CSS variable */
     flex-grow: 1;
-    /* Allows this container to take up the remaining vertical space */
-    /* border: 1px solid lime; */
-    /* For debugging, can be removed */
     height: 70%;
 }
 
