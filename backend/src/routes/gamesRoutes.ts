@@ -4,12 +4,13 @@ import { GamesTable, PlayersTable, UserTable } from "../database/schema";
 import { eq, and, desc } from "drizzle-orm"
 import dotenv from "dotenv";
 import { emitPlayerJoined, emitStatusChanged } from "../socket/socket";
+import authMiddleware from "../middleware/auth";
 dotenv.config()
 
 const router = express.Router();
 
 
-router.post("/create", async (req, res) => {
+router.post("/create", authMiddleware, async (req, res) => {
     const { name, location, date, createdBy } = req.body;
     try {
 

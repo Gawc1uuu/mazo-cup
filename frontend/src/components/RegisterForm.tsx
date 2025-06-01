@@ -6,6 +6,8 @@ const RegisterForm = () => {
     const { dispatch } = useAuthContext();
     const [email, setEmail] = useState<string>("");
     const [username, setUsername] = useState<string>("");
+    const [firstName, setFirstName] = useState<string>("");
+    const [lastName, setLastName] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [checked, setChecked] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -33,6 +35,8 @@ const RegisterForm = () => {
                 body: JSON.stringify({
                     email,
                     username,
+                    firstName,
+                    lastName,
                     password,
                     checked,
                 }),
@@ -50,6 +54,8 @@ const RegisterForm = () => {
             // Reset form fields
             setEmail("");
             setUsername("");
+            setFirstName("")
+            setLastName("")
             setPassword("");
             setChecked(false);
         } catch (err) {
@@ -64,7 +70,7 @@ const RegisterForm = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
                 type="email"
-                placeholder="example@email.com"
+                placeholder="E-mail"
                 className="RegisterForm-input"
                 required
             />
@@ -72,7 +78,23 @@ const RegisterForm = () => {
                 onChange={(e) => setUsername(e.target.value)}
                 value={username}
                 type="text"
-                placeholder="username"
+                placeholder="Nazwa uzytkownika"
+                className="RegisterForm-input"
+                required
+            />
+            <input
+                onChange={(e) => setFirstName(e.target.value)}
+                value={firstName}
+                type="text"
+                placeholder="Imię"
+                className="RegisterForm-input"
+                required
+            />
+            <input
+                onChange={(e) => setLastName(e.target.value)}
+                value={lastName}
+                type="text"
+                placeholder="Nazwisko"
                 className="RegisterForm-input"
                 required
             />
@@ -80,16 +102,16 @@ const RegisterForm = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
                 type="password"
-                placeholder="password"
+                placeholder="Hasło"
                 className="RegisterForm-input"
                 required
             />
             <label className="RegisterForm-checkbox">
                 <input type="checkbox" checked={checked} onChange={handleChange} />
-                I agree to the processing of my personal data
+                Zgadam się na przetwarzanie moich danych
             </label>
             <button className="RegisterForm-button" type="submit">
-                Register
+                Zarejestruj
             </button>
             <div className="RegisterForm-error-container">
                 {error && <div className="ErrorDialog">{error}</div>}

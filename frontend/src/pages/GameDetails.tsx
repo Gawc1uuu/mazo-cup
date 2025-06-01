@@ -75,18 +75,20 @@ const GameDetailsCard: React.FC = () => {
 
         // Listen for team-updated events
         socket.on("team-updated", (data: TeamPickingState) => {
-            console.log(data)
+            // Aktualizacja stanu komponentu w czasie rzeczywistym
             setTeamPickingState(data);
         });
 
         socket.on("status-changed", (data: { gameId: string; status: string }) => {
+            // Reakcja na zmianę statusu meczu (np. przekierowanie)
             if (data.status === "ready" && data.gameId === gameId) {
-                navigate("/"); // Redirect to home page
+                navigate("/");
             }
         });
 
 
         return () => {
+            // Czyszczenie subskrypcji, aby uniknąć wycieków pamięci
             socket.off("team-updated");
             socket.disconnect();
         };

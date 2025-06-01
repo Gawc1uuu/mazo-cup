@@ -1,15 +1,19 @@
 .Navbar {
-    background-color: #1d1d1d;
+    background-color: var(--secondary-blue);
     color: white;
+    height: 100px;
+    display: flex;
+    align-items: center;
 }
 
 .Navbar-container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin-left: auto;
     margin-right: auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%
 }
 
 .Navbar-navigation {
@@ -28,7 +32,7 @@
 }
 
 .Navbar-Logo img {
-    height: 80px;
+    height: 120px;
     width: auto;
 }
 

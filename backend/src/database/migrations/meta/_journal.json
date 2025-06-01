@@ -8,6 +8,13 @@
       "when": 1736457763862,
       "tag": "0000_lively_red_ghost",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1748774128913,
+      "tag": "0001_keen_black_queen",
+      "breakpoints": true
     }
   ]
 }

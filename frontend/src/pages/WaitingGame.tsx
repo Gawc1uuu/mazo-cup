@@ -54,7 +54,6 @@ const WaitingGame = () => {
 
         // Listen for the `player-joined` event
         socket.on("player-joined", (data: { gameId: string; player: Player }) => {
-            console.log("dupaaaaa")
             console.log(data.player)
             dispatch({
                 type: "JOIN_GAME",

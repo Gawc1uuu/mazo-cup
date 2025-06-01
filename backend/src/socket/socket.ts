@@ -3,24 +3,23 @@ import { GamesTable, PlayersTable, UserTable } from "../database/schema";
 import { db } from "../database/db";
 import { and, eq, isNull, sql } from "drizzle-orm";
 
-let io: any; // WebSocket instance
+let io: any;
 
 export const setupWebSocket = (server: any) => {
     io = new Server(server, {
         cors: {
-            origin: "http://localhost:3000", // Replace with your frontend URL
+            origin: "http://localhost:3000",
             methods: ["GET", "POST"],
         },
     });
 
     io.on("connection", (socket: any) => {
         console.log("A user connected");
-
+        //przykład zdarzenia wysłanego przez klienta:
         socket.on("pick-player", async (data: { gameId: string; currentTurn: string; playerId: string, emittedBy: string }) => {
-            console.log("dupaaaa")
+            // Logika biznesowa i aktualizacja bazy danych...
+            // Emisja zdarzenia "team-updated" z nowymi informacjami:
             const { gameId, currentTurn, playerId, emittedBy } = data;
-
-            console.log(gameId)
 
             try {
                 // Update the turn
@@ -121,6 +120,7 @@ export const setupWebSocket = (server: any) => {
 
 export const emitPlayerJoined = (data: { gameId: string, player: any }) => {
     if (io) {
+        // przyklad zdarzenia emitowanego przez serwer
         io.emit("player-joined", data);
     }
 };

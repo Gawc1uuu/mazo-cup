@@ -27,7 +27,7 @@ router.post("/login", async (req: Request, res: Response) => {
         }
         const token = jwt.sign({ userId: existingUser.id }, process.env.SECRET!, { expiresIn: "7d" })
 
-        res.status(200).json({ id: existingUser.id, email: existingUser.email, username: existingUser.username, token })
+        res.status(200).json({ id: existingUser.id, email: existingUser.email, username: existingUser.username, firstName: existingUser.firstName, lastName: existingUser.lastName, token })
         return;
     } catch (error) {
         res.status(500).json({ message: "Something went wrong" })
@@ -36,11 +36,9 @@ router.post("/login", async (req: Request, res: Response) => {
 
 
 router.post("/register", async (req, res) => {
-    const { email, password, username } = req.body;
+    const { email, password, username, firstName, lastName } = req.body;
     try {
         const [existingUser] = await db.select().from(UserTable).where(eq(UserTable.email, email));
-
-        console.log(existingUser)
 
         if (existingUser) {
             res.status(400).json({ message: "User with that email already exists" });
@@ -49,22 +47,22 @@ router.post("/register", async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10)
 
-        console.log(hashedPassword)
-
         const [newUser] = await db.insert(UserTable).values({
             email,
+            firstName,
+            lastName,
             password: hashedPassword,
             username
         }).returning();
 
-        console.log(newUser)
 
         const token = jwt.sign({ userId: newUser.id }, process.env.SECRET!, { expiresIn: "7d" });
 
-        // Respond with the new user details and the token
         res.status(201).json({
             id: newUser.id,
             email: newUser.email,
+            firstName: newUser.firstName,
+            lastName: newUser.lastName,
             username: newUser.username,
             token
 

@@ -13,16 +13,14 @@ const CreateGameForm = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setError(null); // Reset error state before submission
-        setSuccess(null); // Reset success state before submission
-
+        setError(null);
+        setSuccess(null);
 
         const userInfo = localStorage.getItem("user");
         if (!userInfo) {
             setError("You are not authorized. Please log in.");
             return;
         }
-
         const parsedUser = JSON.parse(userInfo);
 
         try {
@@ -30,6 +28,7 @@ const CreateGameForm = () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${parsedUser.token}`
                 },
                 body: JSON.stringify({
                     name,
@@ -47,9 +46,6 @@ const CreateGameForm = () => {
 
             const result = await response.json();
             setSuccess("Game created successfully!");
-            console.log(result);
-
-            // Navigate to the homepage after a delay
             setTimeout(() => navigate("/"), 2000);
         } catch (error) {
             setError("An error occurred while creating the game.");

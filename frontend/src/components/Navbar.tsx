@@ -18,20 +18,19 @@ const Navbar = () => {
                         <img src={logo.toString()} alt="App Logo" />
                     </Link>
                 </div>
-                {/* buttons div */}
                 <div className="Navbar-navigation">
                     {!AuthState.user && <>
-                        <Link to="/login" className='Navbar-AuthButton'>Login</Link>
-                        <Link to="/register" className='Navbar-AuthButton'>Register</Link>
+                        <Link to="/login" className='Navbar-AuthButton'>Zaloguj</Link>
+                        <Link to="/register" className='Navbar-AuthButton'>Stwórz konto</Link>
                     </>
                     }
                     {AuthState.user &&
                         <>
-                            <p>Hello, {AuthState.user.email}</p>
-                            <Link className="Navbar-link" to="/create-game">Create Game</Link>
-                            <Link className="Navbar-link" to="/waiting-games">Join Game</Link>
-                            <Link className="Navbar-link" to="/teams-picking">Pick Teams</Link>
-                            <button onClick={logout} className="Navbar-AuthButton">Logout</button>
+                            <p>Witaj, {AuthState.user.firstName}</p>
+                            <Link className="Navbar-link" to="/create-game">Stwórz grę</Link>
+                            <Link className="Navbar-link" to="/waiting-games">Dołącz do gry</Link>
+                            <Link className="Navbar-link" to="/teams-picking">Wybieranie druzyn</Link>
+                            <button onClick={logout} className="Navbar-AuthButton">Wyloguj</button>
                         </>
                     }
                 </div>

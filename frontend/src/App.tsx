@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import "./App.css"
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
@@ -9,22 +9,23 @@ import useAuthContext from "./hooks/useAuthContext";
 import CreateGame from "./pages/CreateGame";
 import WaitingGame from "./pages/WaitingGame";
 import MyTeamsPicking from "./pages/MyTeamsPicking";
-import TeamsPicking from "./pages/TeamsPicking";
+// import TeamsPicking from "./pages/TeamsPicking"; // This import seems unused in the original code
 import GameDetailsCard from "./pages/GameDetails";
 import ReadyGame from "./pages/ReadyGame";
 
-function App() {
 
+function App() {
   const { state: AuthState, isLoading } = useAuthContext();
 
   if (isLoading) {
-    return <div>Loading...</div>; // Show a loading spinner or placeholder
+    return <div>Loading...</div>;
   }
+
 
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar />
+        <ConditionalNavbarWrapper />
         <div className="Routes-container">
           <Routes>
             <Route path="/login" element={!AuthState.user ? <Login /> : <Navigate to="/" />} />
@@ -37,10 +38,17 @@ function App() {
             <Route path="/ready/:id" element={AuthState.user ? <ReadyGame /> : <Login />} />
           </Routes>
         </div>
+        <Footer />
       </BrowserRouter>
-      <Footer />
     </div>
   );
 }
+
+const ConditionalNavbarWrapper = () => {
+  const location = useLocation();
+  const showNavbar = location.pathname !== "/";
+
+  return showNavbar ? <Navbar /> : null;
+};
 
 export default App;

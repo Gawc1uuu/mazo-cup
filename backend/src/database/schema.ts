@@ -3,12 +3,13 @@ import { pgEnum, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core"
 export const statusEnum = pgEnum('status', ['waiting', 'picking_teams', 'ready']);
 export const roleEnum = pgEnum('role', ['player', 'captain1', 'captain2']);
 export const turnEnum = pgEnum('turn', ['captain1', 'captain2'])
-export const teamEnum = pgEnum('team', ['captain1', 'captain2'])
 
 
 export const UserTable = pgTable("users", {
     id: uuid("id").primaryKey().defaultRandom(),
     username: varchar("username", { length: 255 }).notNull(),
+    firstName: varchar("first_name", { length: 255 }).notNull(),
+    lastName: varchar("last_name", { length: 255 }).notNull(),
     email: varchar("email", { length: 255 }).unique().notNull(),
     password: varchar("password", { length: 255 }).notNull(),
     createdAt: timestamp("createdAt").defaultNow()
@@ -30,7 +31,7 @@ export const PlayersTable = pgTable("players", {
     id: uuid("id").primaryKey().defaultRandom(),
     gameId: uuid("game_id").references(() => GamesTable.id).notNull(),
     userId: uuid("user_id").references(() => UserTable.id).notNull(),
-    role: roleEnum("role"), //can be captain or player
+    role: roleEnum("role"),
     team: varchar('team', { length: 10 }),
     joinedAt: timestamp("joined_at").defaultNow(),
 });
