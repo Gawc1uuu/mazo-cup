@@ -6,6 +6,7 @@ import "./Dashboard.css"
 import { Link } from "react-router-dom"
 import { ClipLoader } from "react-spinners"
 import HeroSection from "../components/dashboard/HeroSection"
+import About from "../components/dashboard/About"
 
 const formatDate = (isoDate: any) => {
     const date = new Date(isoDate);
@@ -45,6 +46,7 @@ const Dashboard = () => {
     return (
         <>
             <HeroSection />
+            <About />
         </>
     )
 }
