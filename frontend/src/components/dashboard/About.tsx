@@ -9,6 +9,8 @@ import fieldSVG from "../../assets/field-icon.svg";
 import bootSVG from "../../assets/boot-icon.svg";
 import cupSVG from "../../assets/cup-icon.svg";
 import starSVG from "../../assets/star-icon.svg"; // Corrected typo: startSVG -> starSVG
+import Dashboard from '../../pages/Dashboard';
+import DashboardHeader from './DashboardHeader';
 
 // Data for the tiles
 const tileData = [
@@ -65,14 +67,8 @@ const tileData = [
 const About = () => {
     return (
         <div className='about'>
-            <div className='about-header'>
-                <h1>
-                    Fakty
-                </h1>
-                <div className='about-header-border'></div>
-            </div>
+            <DashboardHeader title='Fakty' />
             <div className='about-container'>
-
                 <div className='tiles-container'>
                     {tileData.map(tile => (
                         <Tile

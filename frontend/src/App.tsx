@@ -25,12 +25,12 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <ConditionalNavbarWrapper />
+        <Navbar />
         <div className="Routes-container">
           <Routes>
+            <Route path="/" element={<Dashboard />} />
             <Route path="/login" element={!AuthState.user ? <Login /> : <Navigate to="/" />} />
             <Route path="/register" element={!AuthState.user ? <Register /> : <Navigate to="/" />} />
-            <Route path="/" element={AuthState.user ? <Dashboard /> : <Login />} />
             <Route path="/waiting-games" element={AuthState.user ? <WaitingGame /> : <Login />} />
             <Route path="/create-game" element={AuthState.user ? <CreateGame /> : <Login />} />
             <Route path="/teams-picking" element={AuthState.user ? <MyTeamsPicking /> : <Login />} />

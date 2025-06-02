@@ -1,0 +1,25 @@
+.chart {
+    width: 100%;
+    /* Or min-height: 90vh if content might grow larger */
+    background-color: var(--bg-dark-blue);
+    padding-top: 40px;
+    padding-bottom: 40px;
+    box-sizing: border-box;
+    /* border: 1px solid red; */
+    /* For debugging, can be removed */
+    /* Removed justify-content: center; to allow header at top & container to grow */
+}
+
+.chart-container {
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.chart-content {
+    margin-top: 100px;
+    margin-bottom: 10 0px;
+    text-align: center;
+    background-color: var(--dark-blue);
+    padding: 60px;
+}

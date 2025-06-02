@@ -1,0 +1,105 @@
+.info {
+    width: 100%;
+    /* Or min-height: 90vh if content might grow larger */
+    background-color: var(--bg-dark-blue);
+    padding-top: 40px;
+    padding-bottom: 40px;
+    box-sizing: border-box;
+    /* border: 1px solid red; */
+    /* For debugging, can be removed */
+    /* Removed justify-content: center; to allow header at top & container to grow */
+}
+
+.info-container {
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.info-content-first {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 140px;
+}
+
+.info-content-text {
+    max-width: 40%;
+    text-align: center;
+    color: white;
+    background-color: var(--dark-blue);
+    padding: 30px 50px;
+    border-right: 5px solid var(--darker-blue);
+
+}
+
+.info-content-text h2 {
+    font-family: 'Montserrat';
+    font-weight: 200;
+    font-size: 32;
+}
+
+.info-content-text p {
+    font-family: 'Montserrat';
+    font-size: 20;
+    margin: 20px 0px;
+}
+
+.info-content-text button {
+    background-color: #02A4FF;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: none;
+    text-decoration: none;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+}
+
+.info-content-text button:hover {
+    opacity: 0.95;
+    cursor: pointer;
+}
+
+.info-content-text-second {
+    max-width: 40%;
+    text-align: center;
+    color: white;
+    background-color: var(--dark-blue);
+    padding: 30px 50px;
+    border-left: 5px solid var(--darker-blue);
+
+}
+
+.info-content-text-second h2 {
+    font-family: 'Montserrat';
+    font-weight: 200;
+    font-size: 32;
+}
+
+.info-content-text-second p {
+    font-family: 'Montserrat';
+    font-size: 20;
+    margin: 20px 0px;
+}
+
+.info-content-text-second button {
+    background-color: #02A4FF;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: none;
+    text-decoration: none;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+}
