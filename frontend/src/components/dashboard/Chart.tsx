@@ -8,7 +8,7 @@ const Chart = () => {
             <div className='chart-container'>
                 <DashboardHeader title='Rośnij razem z nami!' />
                 <div className='chart-content'>
-                    <img src={chartImg.toString()} alt='chart image' />
+                    <img src={chartImg.toString()} alt='chart' />
                 </div>
             </div>
         </div>

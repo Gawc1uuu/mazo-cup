@@ -1,3 +1,8 @@
+/* Keep your existing .info, .info-container, .info-content-first, 
+   .info-content-text, .info-content-text h2, .info-content-text p,
+   .info-content-text-second, .info-content-text-second h2, 
+   .info-content-text-second p styles as they are. */
+
 .info {
     width: 100%;
     /* Or min-height: 90vh if content might grow larger */
@@ -30,21 +35,47 @@
     background-color: var(--dark-blue);
     padding: 30px 50px;
     border-right: 5px solid var(--darker-blue);
-
 }
 
 .info-content-text h2 {
     font-family: 'Montserrat';
     font-weight: 200;
     font-size: 32;
+    /* Consider adding px: 32px */
 }
 
 .info-content-text p {
     font-family: 'Montserrat';
     font-size: 20;
+    /* Consider adding px: 20px */
     margin: 20px 0px;
 }
 
+.info-content-text-second {
+    max-width: 40%;
+    text-align: center;
+    color: white;
+    background-color: var(--dark-blue);
+    padding: 30px 50px;
+    border-left: 5px solid var(--darker-blue);
+}
+
+.info-content-text-second h2 {
+    font-family: 'Montserrat';
+    font-weight: 200;
+    font-size: 32;
+    /* Consider adding px: 32px */
+}
+
+.info-content-text-second p {
+    font-family: 'Montserrat';
+    font-size: 20;
+    /* Consider adding px: 20px */
+    margin: 20px 0px;
+}
+
+/* REMOVE or COMMENT OUT the old button styles: */
+/*
 .info-content-text button {
     background-color: #02A4FF;
     color: white;
@@ -66,28 +97,6 @@
     cursor: pointer;
 }
 
-.info-content-text-second {
-    max-width: 40%;
-    text-align: center;
-    color: white;
-    background-color: var(--dark-blue);
-    padding: 30px 50px;
-    border-left: 5px solid var(--darker-blue);
-
-}
-
-.info-content-text-second h2 {
-    font-family: 'Montserrat';
-    font-weight: 200;
-    font-size: 32;
-}
-
-.info-content-text-second p {
-    font-family: 'Montserrat';
-    font-size: 20;
-    margin: 20px 0px;
-}
-
 .info-content-text-second button {
     background-color: #02A4FF;
     color: white;
@@ -102,4 +111,34 @@
     align-items: center;
     gap: 10px;
     font-size: 22px;
+}
+
+.info-content-text-second button:hover { // Assuming this hover was intended
+    opacity: 0.95;
+    cursor: pointer;
+}
+*/
+
+/* ADD the new .info-action-button class styles: */
+.info-action-button {
+    background-color: #02A4FF;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: none;
+    text-decoration: none;
+    /* Ensures link doesn't have an underline */
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    /* font-family: 'Montserrat'; /* Add if necessary, but should inherit */
+}
+
+.info-action-button:hover {
+    opacity: 0.95;
+    cursor: pointer;
 }
