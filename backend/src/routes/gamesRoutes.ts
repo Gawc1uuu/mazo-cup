@@ -265,6 +265,8 @@ router.get("/teams-picking/:id", async (req, res) => {
                     id: row.user.id,
                     username: row.user.username,
                     email: row.user.email,
+                    firstName: row.user.firstName,
+                    lastName: row.user.lastName,
                     role: row.player.role,
                     team: row.player.team, // Include team assignment
                 };

@@ -10,6 +10,8 @@ interface Player {
     id: string;
     email: string;
     username: string;
+    firstName: string;
+    lastName: string;
     role: "player" | "captain1" | "captain2";
 }
 
@@ -54,8 +56,6 @@ const GameDetailsCard: React.FC = () => {
                 }
 
                 const data = await response.json();
-                console.log("dupaaaaa")
-                console.log(data)
                 setTeamPickingState(data);
                 setIsLoading(false)
             } catch (error) {
@@ -129,7 +129,7 @@ const GameDetailsCard: React.FC = () => {
                         <h3>Captain 1</h3>
                         <ul>
                             {teamPickingState.teams.captain1.map((player) => (
-                                <li key={player.id}>{player.username} ({player.email})</li>
+                                <li key={player.id}>{player.email}</li>
                             ))}
                         </ul>
                     </>
@@ -141,13 +141,13 @@ const GameDetailsCard: React.FC = () => {
             <div className="GameDetailsCard-players">
                 <h3>Available Players</h3>
                 <ul>
-                    {teamPickingState.players.map((player: any) => (
+                    {teamPickingState.players.map((player: Player) => (
                         <li key={player.id} onClick={() => handlePlayerClick(player)}>
-                            {player.username} ({player.email})
+                            {`${player.firstName} ${player.lastName}`}
                         </li>
                     ))}
                 </ul>
-                <p>Current Turn: {teamPickingState.currentTurn === "captain1" ? "Captain 1" : "Captain 2"}</p>
+                <p>Current Turn: {teamPickingState.currentTurn === "captain1" ? teamPickingState.teams.captain1[0].firstName : teamPickingState.teams.captain2[0].firstName}</p>
             </div>
 
             <div className="GameDetailsCard-captain">
@@ -156,7 +156,7 @@ const GameDetailsCard: React.FC = () => {
                         <h3>Captain 2</h3>
                         <ul>
                             {teamPickingState.teams.captain2.map((player: any) => (
-                                <li key={player.id}>{player.username} ({player.email})</li>
+                                <li key={player.id}>{`${player.firstName} ${player.lastName}`}</li>
                             ))}
                         </ul>
                     </>

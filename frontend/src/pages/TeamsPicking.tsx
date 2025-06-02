@@ -16,6 +16,8 @@ const TeamsPicking = () => {
     const [captain2, setCaptain2] = useState<Player | null>(null);
     const [currentCaptain, setCurrentCaptain] = useState(1); // 1 or 2 to toggle picking turn
 
+    console.log(players)
+
     useEffect(() => {
         // Fetch game details, including captains and players
         const fetchGameDetails = async () => {
@@ -84,7 +86,7 @@ const TeamsPicking = () => {
             <h1>Team Selection</h1>
             <div className="teams-container">
                 <div className="team">
-                    <h2>Captain 1: {captain1?.username}</h2>
+                    <h2>Captain 1: dupa</h2>
                     <div className="team-players">
                         {team1.map((player) => (
                             <p key={player.id}>{player.username}</p>
@@ -100,13 +102,13 @@ const TeamsPicking = () => {
                             onClick={() => handlePickPlayer(player.id)}
                             disabled={!isCurrentUserCaptain()}
                         >
-                            {player.username}
+                            {player.firstName}
                         </button>
                     ))}
                 </div>
 
                 <div className="team">
-                    <h2>Captain 2: {captain2?.username}</h2>
+                    <h2>Captain 2: {`${captain2?.firstName} ${captain2?.lastName}`}</h2>
                     <div className="team-players">
                         {team2.map((player) => (
                             <p key={player.id}>{player.username}</p>

@@ -39,7 +39,6 @@ export const setupWebSocket = (server: any) => {
                         eq(PlayersTable.gameId, gameId),
                         eq(PlayersTable.userId, emittedBy) // Ensure emittedBy matches
                     ));
-                console.log("dupaaaa")
 
 
                 console.log(emitted)
@@ -159,6 +158,8 @@ const fetchGameDetails = async (gameId: string) => {
                 id: row.user.id,
                 username: row.user.username,
                 email: row.user.email,
+                firstName: row.user.firstName,
+                lastName: row.user.lastName,
                 role: row.player.role,
                 team: row.player.team, // Include team assignment
             };

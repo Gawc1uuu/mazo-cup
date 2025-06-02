@@ -4,6 +4,8 @@ export type Player = {
     id: string;
     email: string;
     username: string;
+    firstName: string;
+    lastName: string;
     role: "player" | "captain";
     userId?: string;
 }

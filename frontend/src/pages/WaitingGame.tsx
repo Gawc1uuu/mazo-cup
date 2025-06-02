@@ -119,6 +119,8 @@ const WaitingGame = () => {
             id: AuthState.user?.id!,
             email: AuthState.user?.email!,
             username: AuthState.user?.username!,
+            firstName: AuthState.user?.firstName!,
+            lastName: AuthState.user?.lastName!,
             role: "player",
             userId: AuthState.user?.id!
         };
