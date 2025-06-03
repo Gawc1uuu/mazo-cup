@@ -1,0 +1,99 @@
+.player {
+    display: flex;
+    flex-direction: column;
+    width: 280px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee
+}
+
+.player.clickable {
+    cursor: pointer;
+}
+
+.player.clickable:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+
+.player-personal {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* Increased margin */
+}
+
+.player-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+    border: 2px solid #eee;
+}
+
+.player-name {
+    font-weight: 600;
+    /* Semibold */
+    font-size: 1.2em;
+    color: #333;
+    /* Darker color for better contrast */
+}
+
+.player-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Vertically aligns stat items */
+    font-size: 0.95em;
+    /* Slightly larger font */
+    color: #444;
+    /* Slightly darker grey */
+    /* Lighter border color */
+}
+
+.single-stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+    padding-left: 10px;
+
+}
+
+/* Add a pipe to the right of each stat item, except the last one */
+.single-stat:not(:last-child) {
+    padding-right: 10px;
+    /* Space between the content of this stat and its own pipe */
+    border-right: 2px solid #E78121;
+    /* The vertical pipe, color matches icon target color */
+}
+
+
+.single-stat .stat-icon {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) saturate(100%) invert(60%) sepia(78%) saturate(1350%) hue-rotate(356deg) brightness(93%) contrast(91%);
+    margin-bottom: 4px;
+}
+
+.single-stat p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 1.1em;
+}
+
+
+.single-stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.single-stat .stat-icon {
+    margin-bottom: 0;
+}

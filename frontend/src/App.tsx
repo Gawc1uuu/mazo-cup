@@ -12,6 +12,8 @@ import MyTeamsPicking from "./pages/MyTeamsPicking";
 // import TeamsPicking from "./pages/TeamsPicking"; // This import seems unused in the original code
 import GameDetailsCard from "./pages/GameDetails";
 import ReadyGame from "./pages/ReadyGame";
+import AllReadyGames from "./pages/AllReadyGames";
+import UpdateGame from "./pages/UpdateGame";
 
 
 function App() {
@@ -35,7 +37,9 @@ function App() {
             <Route path="/create-game" element={AuthState.user ? <CreateGame /> : <Login />} />
             <Route path="/teams-picking" element={AuthState.user ? <MyTeamsPicking /> : <Login />} />
             <Route path="/teams-picking/:id" element={AuthState.user ? <GameDetailsCard /> : <Login />} />
+            <Route path="/ready" element={AuthState.user ? <AllReadyGames /> : <Login />} />
             <Route path="/ready/:id" element={AuthState.user ? <ReadyGame /> : <Login />} />
+            <Route path="/games/update/:id" element={AuthState.user ? <UpdateGame /> : <Login />} />
           </Routes>
         </div>
         <Footer />

@@ -1,72 +1,173 @@
-.ReadyGame-container {
-    max-width: 800px;
+/* Mimics the overall Card style from GameDetailsCard */
+.ReadyGameCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1300px;
     margin: 20px auto;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f9f9f9;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    gap: 20px;
 }
 
-.ReadyGame-info-container {
-    text-align: center;
+.ReadyGameCard-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* This will space out the three columns */
+    width: 100%;
+    gap: 20px;
+    /* Gap between columns */
 }
 
-.ReadyGame-title {
+.ReadyGameCard-captain,
+.ReadyGameCard-info-display {
+    flex: 1;
+    /* Each column takes equal width */
+    padding: 20px;
+    border-radius: 8px;
+    /* Added background like .Team */
+    /* Softer shadow */
     text-align: center;
-    font-size: 24px;
+    min-height: 200px;
+    /* To maintain some height */
+}
+
+.ReadyGameCard-info-display {
+    /* Specific styles for the middle info column if needed */
+    /* It can share most styles with -captain if the look is similar */
+    text-align: center;
+    /* Center title and info */
+}
+
+.ReadyGameCard-title {
+    font-size: 22px;
+    /* Slightly smaller than original ReadyGame-title */
     margin-bottom: 20px;
     color: #333;
 }
 
-.ReadyGame-info {
-    margin: 10px 0;
-    font-size: 16px;
-    color: #555;
-}
-
-.ReadyGame-teams {
+.ReadyGameCard-info {
     display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 12px 0;
+    /* Increased margin */
+    font-size: 20px;
+    color: #555;
+    line-height: 1.6;
+    /* Improved readability */
 }
 
-.Team {
-    flex: 1;
-    margin: 0 10px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.ReadyGameCard-info strong {
+    color: var(--primary-orange);
 }
 
-.Team h2 {
-    text-align: center;
+/* Status-specific styling (example) */
+.status-ready {
+    color: green;
+    font-weight: bold;
+}
+
+.status-pending,
+.status-picking {
+    /* Example other statuses */
     color: #E78121;
+    font-weight: bold;
+}
+
+
+.captain-herb-image {
+    margin-bottom: 15px;
+    object-fit: contain;
+    padding: 5px;
+}
+
+.ReadyGameCard-captain-name {
+    font-size: 18px;
+    /* Style for captain's name */
+    color: #E78121;
+    /* Theme color */
     margin-bottom: 15px;
 }
 
-.Team ul {
+.ReadyGameCard-captain ul {
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
-.Team ul li {
+/* Assuming PlayerComponent renders li or a div that can be targeted.
+   If PlayerComponent itself has all necessary styling, these might be overrides or additions.
+   The GameDetailsCard.css had specific styling for li items.
+*/
+.ReadyGameCard-captain ul .PlayerComponent-container {
+    /* Example if PlayerComponent has such a class */
+    margin: 8px 0;
+    padding: 10px;
+    border: 1px solid #eee;
+    /* Lighter border */
+    border-radius: 6px;
+    /* More rounded */
+    background-color: #fdfdfd;
+    /* transition: background-color 0.3s ease; Player items are not interactive here */
+}
+
+/* Fallback if PlayerComponent doesn't have a specific container or for direct li styling if used */
+.ReadyGameCard-captain ul li {
     margin: 10px 0;
-    padding: 8px;
-    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    /* Increased padding */
+    border: 1px solid #eaeaea;
+    /* Lighter border */
+    border-radius: 6px;
+    background-color: #fff;
     font-size: 14px;
+    /* Consistent font size */
 }
 
-.Team ul li:last-child {
-    border-bottom: none;
+
+.ReadyGameCard-captain p {
+    color: #666;
+    /* Slightly darker than #999 */
+    font-size: 14px;
+    margin-top: 15px;
+    /* Increased margin */
 }
 
-.Team-left {
-    margin-right: 10px;
+.ReadyGame-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    /* Ensure it takes some space */
+    font-size: 18px;
+    color: #555;
+    /* Darker text */
 }
 
-.Team-right {
-    margin-left: 10px;
+.ReadyGame-loading p {
+    margin-top: 15px;
+}
+
+.ErrorDialog.ReadyGame-error {
+    /* Making it specific if other error dialogs exist */
+    background-color: #ffdddd;
+    color: #d8000c;
+    padding: 15px;
+    /* Increased padding */
+    border: 1px solid #d8000c;
+    border-radius: 8px;
+    /* More rounded */
+    margin: 20px auto;
+    /* Centering the error dialog */
+    max-width: 600px;
+    /* Limiting width of error dialog */
+    text-align: center;
 }

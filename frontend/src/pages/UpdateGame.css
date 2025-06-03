@@ -1,0 +1,17 @@
+.CreateGame {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    height: 75vh;
+}
+
+.CreateGame-card {
+    width: 800px;
+    max-width: 100%;
+}
+
+.CreateGame-container {
+    width: 100%;
+    display: flex;
+}

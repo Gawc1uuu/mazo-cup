@@ -1,0 +1,152 @@
+.AllReadyGames-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    /* Space between cards */
+    padding: 20px;
+}
+
+.GameCard {
+    width: 100%;
+    max-width: 700px;
+    /* Or your desired card width */
+    /* Styles for Card component come from its own definition or can be overridden here */
+    /* background-color: #f9f9f9; */
+    /* Example if Card doesn't have a background */
+    /* border-radius: 8px; */
+    /* box-shadow: 0 4px 8px rgba(0,0,0,0.1); */
+    padding: 15px 20px;
+    /* Padding inside the card */
+}
+
+.GameCard-decorated-content {
+    display: flex;
+    align-items: center;
+    /* Vertically align herb and text block */
+    justify-content: space-between;
+    /* Pushes herbs to sides */
+    width: 100%;
+}
+
+.GameCard-herb {
+    width: 100px;
+    /* Adjust size as needed */
+    height: 100px;
+    object-fit: contain;
+    flex-shrink: 0;
+    /* Prevent herbs from shrinking if content is too wide */
+}
+
+.GameCard-herb-left {
+    margin-right: 15px;
+    /* Space between left herb and details */
+}
+
+.GameCard-herb-right {
+    margin-left: 15px;
+    /* Space between details and right herb */
+}
+
+.GameCard-details-container {
+    flex-grow: 1;
+}
+
+.GameCard-details-container h3 {
+    font-size: 1.4em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.GameCard-details-container p {
+    font-size: 0.95em;
+    color: #555;
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.GameCard-details-container p strong {
+    color: #E78121;
+    /* Theme color for labels */
+}
+
+/* Status-specific styling (example from previous response) */
+.status-ready {
+    color: green;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.status-pending,
+.status-picking {
+    color: #E78121;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+/* Add more status styles as needed */
+.status-waiting {
+    /* Example */
+    color: navy;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+
+.AllReadyGames-loading,
+.AllReadyGames-error,
+.AllReadyGames-success,
+.AllReadyGames-no-games {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 600px;
+    text-align: center;
+}
+
+.AllReadyGames-loading p {
+    margin-top: 10px;
+    font-size: 1.1em;
+}
+
+/* Assuming ErrorDialog and SuccessDialog classes define specific appearances */
+.ErrorDialog {
+    background-color: #ffdddd;
+    color: #d8000c;
+    padding: 10px 15px;
+    border: 1px solid #d8000c;
+    border-radius: 4px;
+}
+
+.SuccessDialog {
+    background-color: #ddffdd;
+    color: #006400;
+    padding: 10px 15px;
+    border: 1px solid #006400;
+    border-radius: 4px;
+}
+
+.AllReadyGames-no-games {
+    font-size: 1.1em;
+    color: #777;
+}
+
+.see-more-link {
+    display: block;
+    text-decoration: none;
+    color: white;
+    background-color: var(--primary-orange);
+    padding: 10px 20px;
+    border-radius: 10px;
+    max-width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.see-more-link:hover {
+    background-color: var(--dark-orange);
+    cursor: pointer;
+}

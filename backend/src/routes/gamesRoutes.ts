@@ -381,6 +381,8 @@ router.get("/ready/:id", async (req, res) => {
                     id: row.user.id,
                     username: row.user.username,
                     email: row.user.email,
+                    firstName: row.user.firstName,
+                    lastName: row.user.lastName,
                     role: row.player.role,
                     team: row.player.team, // Include team assignment
                 };
@@ -412,6 +414,113 @@ router.get("/ready/:id", async (req, res) => {
     }
 });
 
+router.delete("/delete/:id", async (req: any, res: any) => {
+    const { id: gameId } = req.params;
+
+    try {
+        // Step 1: Find the game by ID
+        const [gameToDelete] = await db
+            .select()
+            .from(GamesTable)
+            .where(eq(GamesTable.id, gameId));
+
+        if (!gameToDelete) {
+            return res.status(404).json({ message: "Game not found." });
+        }
+
+        if (gameToDelete.status !== "waiting") {
+            return res.status(400).json({
+                message: `Game cannot be deleted. Its status is "${gameToDelete.status}", not "waiting".`
+            });
+        }
+
+
+        await db.transaction(async (trx) => {
+            // Delete associated players from PlayersTable
+            await trx.delete(PlayersTable).where(eq(PlayersTable.gameId, gameId));
+
+            // Delete the game from GamesTable
+            await trx.delete(GamesTable).where(eq(GamesTable.id, gameId));
+        });
+
+        res.status(200).json({ message: `Game with ID ${gameId} and all associated players deleted successfully.` });
+        return;
+
+    } catch (error) {
+        console.error(`Error deleting game with ID ${gameId}:`, error);
+        return res.status(500).json({ message: "Failed to delete game. Something went wrong." });
+    }
+});
+
+
+
+router.patch("/update/:id", async (req: any, res: any) => {
+    const { id: gameId } = req.params;
+    const { name, location, date } = req.body; // Only these fields are expected for update
+
+
+
+    try {
+        const [gameToUpdate] = await db
+            .select()
+            .from(GamesTable)
+            .where(eq(GamesTable.id, gameId));
+
+        if (!gameToUpdate) {
+            return res.status(404).json({ message: "Game not found." });
+        }
+
+
+        if (gameToUpdate.status !== "waiting") {
+            return res.status(400).json({
+                message: `Game details can only be updated if the status is "waiting". Current status: "${gameToUpdate.status}".`
+            });
+        }
+
+        const [updatedGame] = await db
+            .update(GamesTable)
+            .set({
+                name,
+                location,
+                date
+            })
+            .where(eq(GamesTable.id, gameId))
+            .returning();
+
+
+        return res.status(200).json(updatedGame);
+
+    } catch (error) {
+        console.error(`Error updating game with ID ${gameId}:`, error);
+        res.status(500).json({ message: "Failed to update game. Something went wrong." });
+    }
+});
+
+router.get("/game/:id", async (req: any, res: any) => {
+    const { id: gameId } = req.params;
+
+    try {
+        const [game] = await db
+            .select({
+                id: GamesTable.id,
+                name: GamesTable.name,
+                location: GamesTable.location,
+                date: GamesTable.date,
+            })
+            .from(GamesTable)
+            .where(eq(GamesTable.id, gameId));
+
+        if (!game) {
+            return res.status(404).json({ message: "Game not found." });
+        }
+
+        return res.status(200).json(game);
+
+    } catch (error) {
+        console.error(`Error fetching game with ID ${gameId}:`, error);
+        res.status(500).json({ message: "Failed to fetch game. Something went wrong." });
+    }
+});
 
 
 

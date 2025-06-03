@@ -27,6 +27,7 @@ const Navbar = () => {
                     {AuthState.user &&
                         <>
                             <p>Witaj, {AuthState.user.firstName}</p>
+                            <Link className="Navbar-link" to="/ready">Moje mecze</Link>
                             <Link className="Navbar-link" to="/create-game">Stwórz grę</Link>
                             <Link className="Navbar-link" to="/waiting-games">Dołącz do gry</Link>
                             <Link className="Navbar-link" to="/teams-picking">Wybieranie druzyn</Link>

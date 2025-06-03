@@ -1,47 +1,223 @@
-.WaitingGame {}
-
-
+/* Container for the list of game cards */
+.WaitingGames-list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Center cards horizontally */
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+}
 
 .GameCard {
-    margin: 15px auto;
-    min-width: 800px;
-    text-align: center;
-}
-
-.GameCard-container h3,
-.GameCard-container p {
-    margin: 0;
-    /* Removes default margin */
-}
-
-.GameCard-container {
     width: 100%;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    /* Enable flexbox */
-    flex-direction: column;
-    /* Stack content vertically */
-    align-items: center;
+    max-width: 800px;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    transition: transform 0.1s ease-out;
+    position: relative;
+    /* Crucial: Establishes a positioning context for absolute children */
 }
+
+.GameCard:hover {
+    transform: translateY(-5px);
+}
+
+/* Container for the icons in the top-right corner */
+.GameCard-icons-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+    /* Space between icons */
+    z-index: 10;
+    /* Ensure icons are above other card content if necessary */
+}
+
+.GameCard-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    filter: invert(80%);
+    transition: all 0.2s ease-in-out;
+}
+
+.GameCard-icon:hover {
+    transform: scale(1.1);
+    filter: invert(20%);
+    /* Slight zoom effect on hover */
+}
+
+/* .GameCard-icon-delete { */
+/* Add specific styles for delete icon if needed, e.g., different color on hover */
+/* } */
+
+
+.GameCard-decorated-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+}
+
+.GameCard-herb {
+    width: 60px;
+    /* Slightly larger herbs */
+    height: 60px;
+    object-fit: contain;
+    flex-shrink: 0;
+    /* Prevent herbs from shrinking */
+}
+
+.GameCard-herb-left {
+    margin-right: 20px;
+    /* Space between left herb and details */
+}
+
+.GameCard-herb-right {
+    margin-left: 20px;
+    /* Space between details and right herb */
+}
+
+/* Container for the textual details of the game */
+.GameCard-details-container {
+    flex-grow: 1;
+    /* Allows details to take up available space */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Center content within the details block */
+    text-align: center;
+    /* Ensure text is centered */
+    /* Space between detail items */
+}
+
+.GameCard-details-container h3 {
+    font-size: 1.5em;
+    /* Larger game title */
+    color: #333;
+    margin-bottom: 8px;
+    /* Adjusted margin */
+}
+
+.GameCard-details-container p {
+    font-size: 1em;
+    color: #555;
+    line-height: 1.5;
+    margin: 0;
+    /* Remove default p margins */
+}
+
+.GameCard-details-container p strong {
+    color: #E78121;
+    /* Theme color for labels */
+    margin-right: 5px;
+}
+
+/* Status-specific styling */
+.status-waiting {
+    /* Example, assuming 'waiting' is a possible status */
+    color: #007bff;
+    /* Blue for waiting */
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.status-picking {
+    color: #E78121;
+    /* Orange for picking */
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.status-ready {
+    color: green;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+/* Add other status styles as needed */
+
 
 .WaitingGame-button {
-    padding: 12px;
+    padding: 10px 20px;
+    /* Adjusted padding */
     background-color: #E78121;
     color: white;
-    font-size: 16px;
+    font-size: 1em;
+    /* Relative font size */
+    font-weight: bold;
     border-radius: 5px;
     border: none;
     cursor: pointer;
-    align-self: flex-end;
+    margin-top: 15px;
+    /* Space above the button */
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    align-self: center;
+    /* Ensure button is centered if details container is flex column */
+}
+
+.WaitingGame-button:hover:not(:disabled) {
+    background-color: #d8731c;
+    transform: translateY(-1px);
 }
 
 .WaitingGame-button:disabled {
     background-color: #ffca98;
+    /* Lighter orange for disabled state */
+    color: #a0a0a0;
+    /* Greyed out text */
     cursor: not-allowed;
+    transform: none;
 }
 
-.WaitingGames-success {
-    margin-bottom: 10px;
+/* Common container for loading, error, success, and no-games messages */
+.WaitingGames-feedback-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 20px auto;
+    /* Centering the container itself */
+    width: 100%;
+    max-width: 600px;
+    /* Limit width of feedback messages */
     text-align: center;
+}
+
+.WaitingGames-feedback-container p {
+    margin-top: 10px;
+    font-size: 1.1em;
+}
+
+.WaitingGames-no-games {
+    color: #777;
+    font-style: italic;
+}
+
+/* General Error/Success Dialog styles (can be in a global CSS file too) */
+.ErrorDialog {
+    background-color: #ffdddd;
+    color: #d8000c;
+    padding: 10px 15px;
+    border: 1px solid #d8000c;
+    border-radius: 4px;
+    width: 100%;
+    /* Make dialog take full width of its container */
+    box-sizing: border-box;
+}
+
+.SuccessDialog {
+    background-color: #ddffdd;
+    color: #006400;
+    padding: 10px 15px;
+    border: 1px solid #006400;
+    border-radius: 4px;
+    width: 100%;
+    /* Make dialog take full width of its container */
+    box-sizing: border-box;
 }

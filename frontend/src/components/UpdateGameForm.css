@@ -1,0 +1,29 @@
+.CreateGame-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 30px;
+}
+
+.CreateGame-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+}
+
+.CreateGame-button {
+    padding: 12px;
+    background-color: #E78121;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.CreateGame-button:hover {
+    background-color: #fc902b;
+}

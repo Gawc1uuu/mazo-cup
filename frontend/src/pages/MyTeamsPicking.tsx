@@ -46,6 +46,9 @@ const MyTeamsPicking = () => {
     return (
         <div className="MyTeamsPicking">
             <div className="MyTeamsPicking-container">
+                {state.games.length === 0 && (
+                    <p className="AllReadyGames-no-games">Brak meczy w których bierzesz udział.</p>
+                )}
                 {state.games.map((game) => (
                     <Card key={game.id} className="MyTeamsPicking-card">
                         <div className="MyTeamsPicking-card-container">
