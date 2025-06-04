@@ -24,6 +24,8 @@ interface TeamPickingState {
         captain2: Player[];
     };
     currentTurn: "captain1" | "captain2";
+    team1Picture: string;
+    team2Picture: string;
 }
 
 const GameDetailsCard: React.FC = () => {
@@ -47,14 +49,16 @@ const GameDetailsCard: React.FC = () => {
                     method: "GET",
                 });
 
+
                 if (!response.ok) {
                     setIsLoading(false);
                     const errData = await response.json();
                     setError(errData.message || "Failed to fetch game details");
                     return;
                 }
-
                 const data = await response.json();
+                console.log(data)
+
                 setTeamPickingState(data);
                 setIsLoading(false);
             } catch (error) {
@@ -97,7 +101,7 @@ const GameDetailsCard: React.FC = () => {
 
         socket.on("status-changed", (data: { gameId: string; status: string }) => {
             if (data.status === "ready" && data.gameId === gameId) {
-                navigate("/");
+                navigate(`/ready/${gameId}`);
             }
         });
 
@@ -152,7 +156,7 @@ const GameDetailsCard: React.FC = () => {
                 {error && <div className="ErrorDialog">{error}</div>}
                 {/* Captain 1 Section */}
                 <div className="GameDetailsCard-captain">
-                    {captain1HerbSrc && <img src={captain1HerbSrc} alt="Captain 1 Herb" className="captain-herb-image" />}
+                    {<img src={teamPickingState.team1Picture ?? captain1HerbSrc} alt="Captain 1 Herb" className="captain-herb-image" />}
                     {teamPickingState.teams.captain1.length > 0 ? (
                         <>
                             {/* Optional: Display captain's name if needed, e.g., under the herb */}
@@ -183,7 +187,7 @@ const GameDetailsCard: React.FC = () => {
 
                 {/* Captain 2 Section */}
                 <div className="GameDetailsCard-captain">
-                    {captain2HerbSrc && <img src={captain2HerbSrc} alt="Captain 2 Herb" className="captain-herb-image" />}
+                    {<img src={teamPickingState.team2Picture ?? captain2HerbSrc} alt="Captain 2 Herb" className="captain-herb-image" />}
                     {teamPickingState.teams.captain2.length > 0 ? (
                         <>
                             {/* <p className="captain-name">{teamPickingState.teams.captain2[0].firstName} {teamPickingState.teams.captain2[0].lastName}</p> */}

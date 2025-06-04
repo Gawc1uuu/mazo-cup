@@ -15,6 +15,13 @@
       "when": 1748774128913,
       "tag": "0001_keen_black_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1749061373633,
+      "tag": "0002_real_namorita",
+      "breakpoints": true
     }
   ]
 }

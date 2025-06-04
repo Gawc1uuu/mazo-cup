@@ -31,6 +31,8 @@ interface ReadyGameState {
         captain1: Player[];
         captain2: Player[];
     };
+    team1Picture: string;
+    team2Picture: string;
 }
 
 const ReadyGame = () => {
@@ -112,7 +114,7 @@ const ReadyGame = () => {
         <Card className="ReadyGameCard">
             <div className="ReadyGameCard-content">
                 <div className="ReadyGameCard-captain">
-                    {captain1HerbSrc && <img src={captain1HerbSrc} alt="Captain 1 Herb" className="captain-herb-image" />}
+                    {<img src={readyGameState.team1Picture ?? captain1HerbSrc} alt="Captain 1 Herb" className="captain-herb-image" />}
                     {readyGameState.teams.captain1.length > 0 ? (
                         <ul>
                             {readyGameState.teams.captain1.map((player) => (
@@ -134,7 +136,7 @@ const ReadyGame = () => {
 
                 {/* Captain 2 Section */}
                 <div className="ReadyGameCard-captain">
-                    {captain2HerbSrc && <img src={captain2HerbSrc} alt="Captain 2 Herb" className="captain-herb-image" />}
+                    {<img src={readyGameState.team2Picture ?? captain1HerbSrc} alt="Captain 2 Herb" className="captain-herb-image" />}
                     {readyGameState.teams.captain2.length > 0 ? (
                         <ul>
                             {readyGameState.teams.captain2.map((player) => (

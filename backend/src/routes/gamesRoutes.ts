@@ -11,13 +11,11 @@ const router = express.Router();
 
 
 router.post("/create", authMiddleware, async (req, res) => {
-    const { name, location, date, createdBy } = req.body;
+    const { name, location, date, createdBy, team1Pic, team2Pic } = req.body;
     try {
 
-        console.log(name, location, date, createdBy);
+        console.log("elo", name, location, date, createdBy, team1Pic, team2Pic);
         const localDate = new Date(date); // Parse local datetime
-
-        console.log("Local Date:", localDate.toString()); // Local time
 
 
         const [newGame] = await db.insert(GamesTable).values({
@@ -25,7 +23,9 @@ router.post("/create", authMiddleware, async (req, res) => {
             location,
             date: localDate,
             status: "waiting",
-            createdBy
+            createdBy,
+            team1Picture: team1Pic,
+            team2Picture: team2Pic
         }).returning()
 
 
@@ -230,6 +230,7 @@ router.get("/teams-picking", async (req, res) => {
 
         const games = Object.values(result);
 
+
         res.status(200).json({ games });
     } catch (error) {
         console.error("Failed to fetch games:", error);
@@ -257,6 +258,8 @@ router.get("/teams-picking/:id", async (req, res) => {
                     players: [], // Players not yet assigned to a team
                     teams: { captain1: [], captain2: [] }, // Players assigned to teams
                     currentTurn: row.game.currentTurn, // Current turn
+                    team1Picture: row.game.team1Picture,
+                    team2Picture: row.game.team2Picture,
                 };
             }
 
@@ -332,6 +335,8 @@ router.get("/ready", async (req, res) => {
             status: row.games.status,
             currentTurn: row.games.currentTurn,
             createdAt: row.games.createdAt,
+            team1Picture: row.games.team1Picture,
+            team2Picture: row.games.team2Picture
         }));
 
 
@@ -373,6 +378,8 @@ router.get("/ready/:id", async (req, res) => {
                     status: row.game.status,
                     players: [], // List of all players
                     teams: { captain1: [], captain2: [] }, // Players assigned to teams
+                    team1Picture: row.game.team1Picture,
+                    team2Picture: row.game.team2Picture,
                 };
             }
 

@@ -24,6 +24,8 @@ export const GamesTable = pgTable("games", {
     status: statusEnum("status"), // statuses can be waiting, team_picking,ready
     currentTurn: turnEnum("current_turn"),
     createdAt: timestamp("created_at").defaultNow(),
+    team1Picture: varchar("team_one_picture"),
+    team2Picture: varchar("team_two_picture")
 });
 
 

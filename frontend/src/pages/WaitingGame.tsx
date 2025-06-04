@@ -19,6 +19,7 @@ import herb6Img from "../assets/herb-6.png";
 import deleteIcon from "../assets/delete-icon.svg"
 import updateIcon from "../assets/update-icon.svg"
 import { useNavigate } from "react-router-dom";
+import { translateGameStatus } from "../utils/mapGameStatus";
 
 const herbImages = [herb1Img, herb2Img, herb3Img, herb4Img, herb5Img, herb6Img];
 
@@ -247,12 +248,12 @@ const WaitingGame = () => {
                             </div>
                         )}
                         <div className="GameCard-decorated-content">
-                            <img src={herbSrcLeft.toString()} alt="Decorative Herb" className="GameCard-herb GameCard-herb-left" />
+                            <img src={game.team1Picture ?? herbSrcLeft.toString()} alt="Decorative Herb" className="GameCard-herb GameCard-herb-left" />
                             <div className="GameCard-details-container">
                                 <h3>{game.name || `Game at ${game.location}`}</h3>
                                 <p><strong>Lokalizacja:</strong> {game.location}</p>
                                 <p><strong>Data:</strong> {formatDate(game.date)}</p>
-                                <p><strong>Status:</strong> <span className={`status-${game.status.toLowerCase()}`}>{game.status}</span></p>
+                                <p><strong>Status:</strong> <span className={`status-${game.status.toLowerCase()}`}>{translateGameStatus(game.status)}</span></p>
                                 <p><strong>Gracze:</strong> {`${game.players?.length || 0}/6`}</p>
                                 <button
                                     className="WaitingGame-button"
@@ -262,7 +263,7 @@ const WaitingGame = () => {
                                     {isPlayerAlreadyInGame ? "Already Joined" : (game.players?.length! >= 6 ? "Game Full" : "Join Game")}
                                 </button>
                             </div>
-                            <img src={herbSrcRight.toString()} alt="Decorative Herb" className="GameCard-herb GameCard-herb-right" />
+                            <img src={game.team2Picture ?? herbSrcRight.toString()} alt="Decorative Herb" className="GameCard-herb GameCard-herb-right" />
                         </div>
                     </Card>
                 );

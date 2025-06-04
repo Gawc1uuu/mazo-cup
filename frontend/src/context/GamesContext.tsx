@@ -19,6 +19,8 @@ export type Game = {
     createdAt: string,
     status: "waiting" | "picking_teams" | "ready",
     players?: Player[];
+    team1Picture?: string;
+    team2Picture?: string;
 }
 
 type GameAction = { type: "SET_GAMES", payload: Game[] } | { type: "ADD_GAME", payload: Game } | { type: "DELETE_GAME", payload: string } | { type: "UPDATE_GAME", payload: Game } | { type: "JOIN_GAME", payload: { gameId: string, player: Player } } | { type: "STATUS_CHANGE", payload: string }

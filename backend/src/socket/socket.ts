@@ -150,6 +150,9 @@ const fetchGameDetails = async (gameId: string) => {
                 players: [], // Players not yet assigned to a team
                 teams: { captain1: [], captain2: [] }, // Players assigned to teams
                 currentTurn: row.game.currentTurn, // Current turn
+                team1Picture: row.game.team1Picture,
+                team2Picture: row.game.team2Picture,
+
             };
         }
 

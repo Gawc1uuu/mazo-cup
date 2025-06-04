@@ -14,6 +14,7 @@ import herb4Img from "../assets/herb-4.png";
 import herb5Img from "../assets/herb-5.png";
 import herb6Img from "../assets/herb-6.png";
 import { Link } from 'react-router-dom';
+import { translateGameStatus } from '../utils/mapGameStatus';
 
 const herbImages = [herb1Img, herb2Img, herb3Img, herb4Img, herb5Img, herb6Img];
 
@@ -127,16 +128,16 @@ const AllReadyGames = () => {
                 return (
                     <Card key={game.id} className="GameCard">
                         <div className="GameCard-decorated-content">
-                            <img src={herbSrcLeft.toString()} alt="Decorative Herb" className="GameCard-herb GameCard-herb-left" />
+                            <img src={game.team1Picture ?? herbSrcLeft.toString()} alt="Decorative Herb" className="GameCard-herb GameCard-herb-left" />
                             <div className="GameCard-details-container"> {/* Renamed from GameCard-container for clarity */}
                                 <h3>{game.name || `Game at ${game.location}`}</h3> {/* Display game name if available */}
                                 <p><strong>Location:</strong> {game.location}</p>
                                 <p><strong>Date:</strong> {formatDate(game.date)}</p>
-                                <p><strong>Status:</strong> <span className={`status-${game.status.toLowerCase()}`}>{game.status}</span></p>
+                                <p><strong>Status:</strong> <span className={`status-${game.status.toLowerCase()}`}>{translateGameStatus(game.status)}</span></p>
                                 <Link className='see-more-link' to={`/ready/${game.id}`}>Zobacz więcej</Link>
                                 {/* Assuming max players is 6. Adjust if this info comes from game data */}
                             </div>
-                            <img src={herbSrcRight.toString()} alt="Decorative Herb" className="GameCard-herb GameCard-herb-right" />
+                            <img src={game.team2Picture ?? herbSrcRight.toString()} alt="Decorative Herb" className="GameCard-herb GameCard-herb-right" />
                         </div>
                         {success && ( // This success message is global to all cards if not reset.
                             <div className="AllReadyGames-success">

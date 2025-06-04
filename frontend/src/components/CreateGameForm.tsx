@@ -1,6 +1,17 @@
 import React, { useState } from "react";
 import "./CreateGameForm.css";
 import { useNavigate } from "react-router-dom";
+import herb1Img from "../assets/herb-1.png";
+import herb2Img from "../assets/herb-2.png";
+import herb3Img from "../assets/herb-3.png";
+import herb4Img from "../assets/herb-4.png";
+import herb5Img from "../assets/herb-5.png";
+import herb6Img from "../assets/herb-6.png";
+
+const herbImages = [herb1Img, herb2Img, herb3Img, herb4Img, herb5Img, herb6Img];
+
+const getRandomHerb = () => herbImages[Math.floor(Math.random() * herbImages.length)];
+
 
 const CreateGameForm = () => {
     const navigate = useNavigate();
@@ -35,6 +46,8 @@ const CreateGameForm = () => {
                     location,
                     date,
                     createdBy: parsedUser.id,
+                    team1Pic: getRandomHerb().toString(),
+                    team2Pic: getRandomHerb().toString()
                 }),
             });
 
@@ -46,7 +59,7 @@ const CreateGameForm = () => {
 
             const result = await response.json();
             setSuccess("Game created successfully!");
-            setTimeout(() => navigate("/"), 2000);
+            setTimeout(() => navigate("/waiting-games"), 2000);
         } catch (error) {
             setError("An error occurred while creating the game.");
             console.error(error);
