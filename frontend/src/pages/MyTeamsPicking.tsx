@@ -100,7 +100,7 @@ const MyTeamsPicking = () => {
                                     <p><strong>Location:</strong> {game.location}</p>
                                     <p><strong>Date:</strong> {formatDate(game.date)}</p>
                                     <p><strong>Status:</strong> <span className={`status-${game.status.toLowerCase()}`}>{translateGameStatus(game.status)}</span></p>
-                                    <Link className='see-more-link' to={`/ready/${game.id}`}>Zobacz więcej</Link>
+                                    <Link className='see-more-link' to={`/teams-picking/${game.id}`}>Zobacz więcej</Link>
                                     {/* Assuming max players is 6. Adjust if this info comes from game data */}
                                 </div>
                                 <img src={game.team2Picture ?? herbSrcRight.toString()} alt="Decorative Herb" className="GameCard-herb GameCard-herb-right" />

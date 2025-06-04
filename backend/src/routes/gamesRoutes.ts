@@ -367,6 +367,8 @@ router.get("/ready/:id", async (req, res) => {
             .leftJoin(UserTable, eq(UserTable.id, PlayersTable.userId))
             .where(and(eq(GamesTable.id, id), eq(GamesTable.status, "ready")));
 
+        console.log("dupa1", game)
+
         const gameDetails = game.reduce((acc: any, row: any) => {
             // Initialize the game object if not already set
             if (!acc[row.game.id]) {
@@ -411,6 +413,7 @@ router.get("/ready/:id", async (req, res) => {
             return acc;
         }, {});
 
+        console.log("dupa", gameDetails[id])
         // Flatten the result to send the first game details (if there's only one game by ID)
         res.status(200).json(gameDetails[id] || {});
         return;

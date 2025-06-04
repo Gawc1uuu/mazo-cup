@@ -58,6 +58,7 @@ const ReadyGame = () => {
                     return;
                 }
                 const data = await response.json();
+                console.log(data)
                 setReadyGameState(data);
             } catch (error) {
                 console.error('Error fetching game details:', error);
